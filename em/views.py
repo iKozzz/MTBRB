@@ -1,7 +1,9 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views import generic
+
+from em.forms import RiderAddForm
 from .models import Rider
 
 
@@ -29,6 +31,13 @@ def results(request, rider_id):
 
 
 def rider_add(request):
-    r = Rider(rider_name=request.POST['rider_name'], rider_bike=request.POST['rider_bike'])
-    r.save()
-    return HttpResponseRedirect(reverse('em:index'))
+    if request.method == 'POST':
+        form = RiderAddForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('em:index')
+    else:
+        form = RiderAddForm()
+    return render(request, 'em/rider_add_form.html', {
+        'form': form
+    })

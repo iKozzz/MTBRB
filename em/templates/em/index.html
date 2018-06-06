@@ -3,24 +3,36 @@
 {% block body_block %}
 <div class="page-header">
     <h3>Список райдеров</h3>
+    <div class="row">
+        <a class="btn btn-success" role="button" href="{% url 'em:rider_add' %}"> добавиь райдера</a>
+    </div>
 </div>
 <div class="row">
     <div class="col-md-12">
-        <table class="table table-striped">
-            <thead>
+        <table class="table table-hover">
+            <thead class="text-uppercase">
             <tr>
-                <th>Имя</th>
-                <th>Байк</th>
-                <th>Информация</th>
+                <th>фото</th>
+                <th>имя</th>
+                <th>байк</th>
+                <th>информация</th>
             </tr>
             </thead>
             <tbody>
             {% if riders_list %}
             {% for rider in riders_list %}
             <tr>
-                <td>{{ rider.rider_name }}</td>
-                <td>{{ rider.rider_bike }}</td>
-                <td>
+                <td class="com-md-1">
+                    {% if rider.photo %}
+                        <img class="col-sm-12 img-circle" src="{{ rider.photo.url }}" alt="rider_avatar">
+                        {% else %}
+                        {% load static %}
+                        <img class="col-sm-12 img-circle" src="{% static 'em/img/default_avatar.png' %}" alt="rider_avatar">
+                    {% endif %}
+                </td>
+                <td class="com-md-4">{{ rider.name }}</td>
+                <td class="com-md-4">{{ rider.info }}</td>
+                <td class="com-md-3">
                     <a class="btn btn-info" href="{% url 'em:rider_details' rider.id %}" role="button">подробнее</a>
                 </td>
             </tr>

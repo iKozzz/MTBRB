@@ -1,0 +1,37 @@
+{% extends 'em/base.html' %}
+
+{% block body_block %}
+<div class="page-header">
+    <h3>Список райдеров</h3>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Байк</th>
+                <th>Информация</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if riders_list %}
+            {% for rider in riders_list %}
+            <tr>
+                <td>{{ rider.rider_name }}</td>
+                <td>{{ rider.rider_bike }}</td>
+                <td>
+                    <a class="btn btn-info" href="{% url 'em:rider_details' rider.id %}" role="button">подробнее</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td>Riders list is empty.</td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

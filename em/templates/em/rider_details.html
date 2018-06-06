@@ -1,0 +1,33 @@
+{% extends 'em/base.html' %}
+
+{% block body_block %}
+<h1>{{ rider.rider_name }}</h1>
+<h2>{{ rider.rider_bike }}</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Добавить райдера</h3>
+            </div>
+            <div class="panel-body">
+                <form action="{% url 'em:rider_add' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="rider_name">Имя:</label>
+                        <input class="form-control" type="text" size="30" name="rider_name" id="rider_name" placeholder="enter rider name">
+                    </div>
+                    <div class="form-group">
+                        <label for="rider_bike">Байк:</label>
+                        <input class="form-control" type="text" size="20" name="rider_bike" id="rider_bike" placeholder="enter bike brand">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% endblock %}

@@ -6,10 +6,15 @@ from . import views
 
 app_name = 'em'
 urlpatterns = [
-    path('', views.IndexView.as_view(), name='index'),
+    path('', views.RidersView.as_view(), name='riders'),
     path('rider_details/<int:pk>', views.RiderDetailsView.as_view(), name='rider_details'),
-    path('results/', views.ResultsView.as_view(), name='results'),
     path('rider_add/', views.rider_add, name='rider_add'),
+
+    path('stages/', views.StagesView.as_view(), name='stages'),
+    path('stage_details/<int:pk>', views.StageDetailsView.as_view(), name='stage_details'),
+    path('stage_add/', views.stage_add, name='stage_add'),
+
+    path('liderboard/', views.LiderboardView.as_view(), name='liderboard'),
 ]
 
 if settings.DEBUG:

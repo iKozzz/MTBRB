@@ -1,0 +1,42 @@
+{% extends 'em/base.html' %}
+
+{% block body_block %}
+<div class="row">
+    <div class="col-md-4">
+        <h3>Список этапов</h3>
+        <a class="btn btn-success" role="button" href="{% url 'em:stage_add' %}">
+            <label class="glyphicon glyphicon-plus"></label> Добавиь этап
+        </a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-hover">
+            <thead class="text-uppercase">
+                <tr>
+                    <th class="col-md-4">название</th>
+                    <th class="col-md-4">дата начала</th>
+                    <th class="col-md-2">дополнительно</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if stages_list %}
+            {% for stage in stages_list %}
+            <tr>
+                <td>{{ stage.name }}</td>
+                <td>{{ stage.date_start }}</td>
+                <td>
+                    <a class="btn btn-info" href="{% url 'em:stage_details' stage.id %}" role="button">подробнее</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr class="row">
+                <td class="text-center text-info text-uppercase">stages list is empty</td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

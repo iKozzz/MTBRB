@@ -2,16 +2,16 @@
 
 {% block body_block %}
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="row">
-                <h1>{{ rider.name }}</h1>
-                <h2>{{ rider.info }}</h2>
-            </div>
-            <div class="row">
-                <img class="col-md-12 img-rounded" src="{{ rider.photo.url }}" alt="rider_photo">
-            </div>
+<div class="container">
+    <div class="col-md-12">
+        <div class="row">
+            <img class="img-responsive img-rounded" src="{{ rider.photo.url }}" alt="rider_photo">
+        </div>
+        <div class="row">
+            <h1 class="text-primary text-center">{{ rider.name }}</h1>
+            <h4 class="text-justify">{{ rider.info }}</h4>
         </div>
     </div>
+</div>
 
 {% endblock %}

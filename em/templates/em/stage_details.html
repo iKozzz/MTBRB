@@ -1,0 +1,24 @@
+{% extends 'em/base.html' %}
+
+{% block body_block %}
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="row">
+            <h1 class="text-primary text-center">{{ stage.name }}</h1>
+        </div>
+        <div class="row">
+            <div class="col-sm-2 pull-left">
+                <span>начало</span><h5 class="text-success">{{ stage.date_start }}</h5>
+            </div>
+            <div class="col-sm-2 pull-right">
+                <span>конец</span><h5 class="text-warning">{{ stage.date_end }}</h5>
+            </div>
+        </div>
+        <div class="row">
+            <h4 class="text-justify">{{ stage.info }}</h4>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

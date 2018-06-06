@@ -1,6 +1,4 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse
 from django.views import generic
 
 from em.forms import RiderAddForm
@@ -12,7 +10,7 @@ class IndexView(generic.ListView):
     context_object_name = 'riders_list'
 
     def get_queryset(self):
-        return Rider.objects.order_by('rider_name')[:]
+        return Rider.objects.order_by('name')[:]
 
 
 class RiderDetailsView(generic.DetailView):

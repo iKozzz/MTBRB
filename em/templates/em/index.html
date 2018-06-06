@@ -2,9 +2,13 @@
 
 {% block body_block %}
 <div class="page-header">
-    <h3>Список райдеров</h3>
     <div class="row">
-        <a class="btn btn-success" role="button" href="{% url 'em:rider_add' %}"> добавиь райдера</a>
+        <div class="col-md-4">
+            <h3>Список райдеров</h3>
+            <a class="btn btn-success" role="button" href="{% url 'em:rider_add' %}">
+                <label class="glyphicon glyphicon-plus"></label> Добавиь райдера
+            </a>
+        </div>
     </div>
 </div>
 <div class="row">
@@ -22,17 +26,17 @@
             {% if riders_list %}
             {% for rider in riders_list %}
             <tr>
-                <td class="com-md-1">
+                <td class="col-md-1">
                     {% if rider.photo %}
-                        <img class="col-sm-12 img-circle" src="{{ rider.photo.url }}" alt="rider_avatar">
+                        <img class="col-sm-12 img-circle img-thumbnail float-left size" src="{{ rider.photo.url }}" alt="rider_avatar">
                         {% else %}
                         {% load static %}
-                        <img class="col-sm-12 img-circle" src="{% static 'em/img/default_avatar.png' %}" alt="rider_avatar">
+                        <img class="col-sm-12 img-circle img-thumbnail float-left" src="{% static 'em/img/default_avatar.png' %}" alt="rider_avatar">
                     {% endif %}
                 </td>
-                <td class="com-md-4">{{ rider.name }}</td>
-                <td class="com-md-4">{{ rider.info }}</td>
-                <td class="com-md-3">
+                <td class="col-md-4">{{ rider.name }}</td>
+                <td class="col-md-4">{{ rider.info }}</td>
+                <td class="col-md-3">
                     <a class="btn btn-info" href="{% url 'em:rider_details' rider.id %}" role="button">подробнее</a>
                 </td>
             </tr>

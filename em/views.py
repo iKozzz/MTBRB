@@ -23,7 +23,7 @@ class StagesView(generic.ListView):
     context_object_name = 'stages_list'
 
     def get_queryset(self):
-        return Stage.objects.order_by('name')[:]
+        return Stage.objects.order_by('date_start')[:]
 
 
 class StageDetailsView(generic.DetailView):
@@ -31,14 +31,12 @@ class StageDetailsView(generic.DetailView):
     template_name = 'em/stage_details.html'
 
 
-class LiderboardView(generic.DetailView):
+class LiderboardView(generic.ListView):
     model = Rider
     template_name = 'em/liderboard.html'
 
-
-def liderboard(request, rider_id):
-    rider = get_object_or_404(Rider, pk=rider_id)
-    return render(request, 'em/liderboard.html', {'rider': rider})
+    def get_queryset(self):
+        return Rider.objects.order_by('name')[:]
 
 
 def rider_add(request):

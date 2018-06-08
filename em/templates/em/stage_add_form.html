@@ -3,17 +3,50 @@
 {% block body_block %}
 
 <div class="row">
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Добавить этап</h3>
-            </div>
-            <div class="panel-body">
-                <form method="post" action="">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button class="btn btn-primary" type="submit">добавить этап</button>
-                </form>
+    <div class="row">
+        <div class="col-md-2">
+            <a class="btn btn-default" href="{% url 'em:stages' %}" role="button">Назад</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Добавить этап</h3>
+                </div>
+                <div class="panel-body">
+                    <form method="post">
+                        {% csrf_token %}
+
+                        {{ form.non_field_errors }}
+                        <div class="form-group">
+                            {{ form.name.errors }}
+                            <label for="{{ form.name.id_for_label }}">Название</label>
+                            <input type="text" class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" required placeholder="Введите название">
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.info.errors }}
+                            <label for="{{ form.info.id_for_label }}">Информация</label>
+                            <input type="text" class="form-control" id="{{ form.info.id_for_label }}" name="{{ form.info.html_name }}" required placeholder="Дополнитнльно">
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.date_start.errors }}
+                            <label for="{{ form.date_start.id_for_label }}">Начало</label>
+                            <input type="datetime-local" class="form-control" id="{{ form.date_start.id_for_label }}" name="{{ form.date_start.html_name }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.date_end.errors }}
+                            {{ form.date_end }}
+                            <label for="{{ form.date_end.id_for_label }}">Конец</label>
+                            <input type="datetime-local" class="form-control" id="{{ form.date_end.id_for_label }}" name="{{ form.date_end.html_name }}" required>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">добавить этап</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

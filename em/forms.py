@@ -1,22 +1,23 @@
-from django import forms
+from django.forms import *
 from em.models import *
 
 
-class RiderAddForm(forms.ModelForm):
+class RiderAddForm(ModelForm):
+    name = CharField(max_length=100)
+    info = CharField(max_length=300)
+    photo = FileField()
+
     class Meta:
         model = Rider
-        fields = ('name', 'info', 'photo',)
+        fields = ['name', 'info', 'photo']
 
 
-class DateTimeInput(forms.DateTimeInput):
-    input_type = 'date'
+class StageAddForm(ModelForm):
+    name = CharField(max_length=100)
+    info = CharField(max_length=300)
+    date_start = DateTimeField(widget=DateTimeInput)
+    date_end = DateTimeField(widget=DateTimeInput)
 
-
-class StageAddForm(forms.ModelForm):
     class Meta:
         model = Stage
-        fields = ('name', 'info', 'date_start', 'date_end',)
-        widgets = {
-            'date_start': DateTimeInput(),
-            'date_end': DateTimeInput(),
-        }
+        fields = ['name', 'info', 'date_start', 'date_end']

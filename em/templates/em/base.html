@@ -7,33 +7,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'em/css/bootstrap.min.css' %}" />
+    {% load static %}
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
 </head>
 <body>
-<nav class="navbar navbar-inverse">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="{% url 'em:riders' %}">MTBRB - Event Manager</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="{% url 'em:stages' %}">Этапы</a></li>
-                <li><a href="{% url 'em:liderboard' %}">Лидеры</a></li>
-            </ul>
-        </div><!--/.nav-collapse -->
-    </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'em:riders' %}">MTBRB - Event Manager</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="{% url 'em:stages' %}">Этапы</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'em:liderboard' %}">Лидеры</a></li>
+        </ul>
+  </div>
 </nav>
-
 <div class="container theme-showcase" role="main">
 {% block body_block %}{% endblock %}
 </div>
+
 {% load static %}
-<script type=text/javascript src="{% static 'em/js/jquery-3.2.1.min.js' %}"></script>
+<script type=text/javascript src="{% static 'em/js/jquery-3.3.1.slim.min.js' %}"></script>
+{% load static %}
+<script type=text/javascript src="{% static 'em/js/popper.min.js' %}"></script>
 {% load static %}
 <script type=text/javascript src="{% static 'em/js/bootstrap.min.js' %}"></script>
 </body>

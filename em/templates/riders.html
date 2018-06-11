@@ -1,4 +1,4 @@
-{% extends 'em/base.html' %}
+{% extends 'base.html' %}
 
 {% block body_block %}
 
@@ -6,7 +6,7 @@
     <div class="col-md-4">
         <h3>Список райдеров</h3>
         <a class="btn btn-success" role="button" href="{% url 'em:rider_add' %}">
-            <label class="glyphicon glyphicon-plus"></label> Добавиь райдера
+            <i class="fas fa-plus-square"></i> Добавиь райдера
         </a>
     </div>
 </div>
@@ -24,23 +24,27 @@
             {% if riders_list %}
             {% for rider in riders_list %}
             <tr>
-                <td>
+                <td class="">
                     {% if rider.photo %}
-                        <img class="img-fluid img-thumbnail" src="{{ rider.photo.url }}" alt="rider_avatar">
-                        {% else %}
-                        {% load static %}
-                        <img class="img-fluid img-thumbnail" src="{% static 'em/img/default_avatar.png' %}" alt="rider_avatar">
+                        <div class="icon">
+                            <img class="img-fluid img-thumbnail" src="{{ rider.photo.url }}" alt="rider_avatar">
+                        </div>
+                    {% else %}
+                        <div class="icon">
+                            {% load static %}
+                            <i class="fas fa-user-circle"></i>
+                        </div>
                     {% endif %}
                 </td>
                 <td class="text-center"><h4>{{ rider.name }}</h4></td>
                 <td>
-                    <a class="btn btn-info" href="{% url 'em:rider_details' rider.id %}" role="button">подробнее</a>
+                    <a class="btn btn-info text-uppercase" href="{% url 'em:rider_details' rider.id %}" role="button"><i class="fas fa-info-circle"></i> подробнее</a>
                 </td>
             </tr>
             {% endfor %}
             {% else %}
             <tr class="row">
-                <td class="text-center text-info text-uppercase">riders list is empty</td>
+                <td class="text-center text-info text-uppercase">пусто</td>
             </tr>
             {% endif %}
             </tbody>

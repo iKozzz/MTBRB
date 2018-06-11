@@ -6,20 +6,20 @@ from .models import *
 
 
 class RidersView(generic.ListView):
-    template_name = 'em/riders.html'
+    template_name = 'riders.html'
     context_object_name = 'riders_list'
 
     def get_queryset(self):
-        return Rider.objects.order_by('name')[:]
+        return Rider.objects.order_by('id')[:]
 
 
 class RiderDetailsView(generic.DetailView):
     model = Rider
-    template_name = 'em/rider_details.html'
+    template_name = 'rider_details.html'
 
 
 class StagesView(generic.ListView):
-    template_name = 'em/stages.html'
+    template_name = 'stages.html'
     context_object_name = 'stages_list'
 
     def get_queryset(self):
@@ -28,15 +28,15 @@ class StagesView(generic.ListView):
 
 class StageDetailsView(generic.DetailView):
     model = Stage
-    template_name = 'em/stage_details.html'
+    template_name = 'stage_details.html'
 
 
 class LiderboardView(generic.ListView):
     model = Rider
-    template_name = 'em/liderboard.html'
+    template_name = 'liderboard.html'
 
     def get_queryset(self):
-        return Rider.objects.order_by('name')[:]
+        return Rider.objects.order_by('created_at')[:]
 
 
 def rider_add(request):
@@ -47,7 +47,7 @@ def rider_add(request):
             return redirect('em:riders')
     else:
         form = RiderAddForm()
-    return render(request, 'em/rider_add_form.html', {
+    return render(request, 'rider_add_form.html', {
         'form': form
     })
 
@@ -60,6 +60,6 @@ def stage_add(request):
             return redirect('em:stages')
     else:
         form = StageAddForm()
-    return render(request, 'em/stage_add_form.html', {
+    return render(request, 'stage_add_form.html', {
         'form': form
     })

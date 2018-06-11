@@ -1,4 +1,4 @@
-{% extends 'em/base.html' %}
+{% extends 'base.html' %}
 
 {% block body_block %}
 
@@ -41,8 +41,8 @@
 
 
                     <div class="form-group mt-5">
-                        <a class="btn btn-danger float-left" href="{% url 'em:stages' %}" role="button">Назад</a>
-                        <button class="btn btn-success float-right" type="submit">добавить этап</button>
+                        <a class="btn btn-danger float-left text-uppercase" href="{% url 'em:stages' %}" role="button"><i class="fas fa-times-circle"></i> отмена</a>
+                        <button class="btn btn-success float-right text-uppercase" type="submit"><i class="fas fa-check-circle"></i> добавить этап</button>
                     </div>
                 </form>
             </div>

@@ -27,7 +27,8 @@ class RiderAddForm(ModelForm):
                 'class': 'form-control',
                 'type': 'file'
             }
-        )
+        ),
+        required=False
     )
 
     class Meta:

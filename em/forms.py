@@ -3,9 +3,32 @@ from em.models import *
 
 
 class RiderAddForm(ModelForm):
-    name = CharField(max_length=100)
-    info = CharField(max_length=300)
-    photo = FileField()
+    name = CharField(
+        widget=TextInput(
+            attrs={
+                'class': 'form-control',
+                'type': 'text',
+                'placeholder': 'Введите имя'
+            }
+        )
+    )
+    info = CharField(
+        widget=TextInput(
+            attrs={
+                'class': 'form-control',
+                'type': 'text',
+                'placeholder': 'Дополнительная информация'
+            }
+        )
+    )
+    photo = FileField(
+        widget=FileInput(
+            attrs={
+                'class': 'form-control',
+                'type': 'file'
+            }
+        )
+    )
 
     class Meta:
         model = Rider
@@ -13,10 +36,60 @@ class RiderAddForm(ModelForm):
 
 
 class StageAddForm(ModelForm):
-    name = CharField(max_length=100)
-    info = CharField(max_length=300)
-    date_start = DateTimeField(widget=DateTimeInput)
-    date_end = DateTimeField(widget=DateTimeInput)
+    name = CharField(
+        widget=TextInput(
+            attrs={
+                'class': 'form-control',
+                'type': 'text',
+                'placeholder': 'Введите название'
+            }
+        )
+    )
+    info = CharField(
+        widget=TextInput(
+            attrs={
+                'class': 'form-control',
+                'type': 'text',
+                'placeholder': 'Опишите подробности'
+            }
+        )
+    )
+    date_start = SplitDateTimeField(
+        widget=SplitDateTimeWidget(
+            date_attrs={
+                'class': 'form-control',
+                'type': 'date'
+            },
+            time_attrs={
+                'class': 'form-control',
+                'type': 'time'
+            },
+            date_format={
+                '%d/%m/%Y'
+            },
+            time_format={
+                '%HH:%MM'
+            }
+        )
+    )
+    date_end = SplitDateTimeField(
+        widget=SplitDateTimeWidget(
+            date_attrs={
+                'class': 'form-control',
+                'type': 'date'
+            },
+            time_attrs={
+                'class': 'form-control',
+                'type': 'time'
+            },
+            date_format={
+                '%d/%m/%Y'
+            },
+            time_format={
+                '%HH:%MM'
+            }
+        )
+    )
 
     class Meta:
         model = Stage

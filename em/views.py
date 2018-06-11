@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, redirect
 from django.views import generic
 
 from em.forms import *
@@ -54,7 +54,7 @@ def rider_add(request):
 
 def stage_add(request):
     if request.method == 'POST':
-        form = StageAddForm(request.POST)
+        form = StageAddForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             return redirect('em:stages')

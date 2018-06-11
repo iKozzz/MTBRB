@@ -2,56 +2,53 @@
 
 {% block body_block %}
 
-<div class="row">
-    <div class="row">
-        <div class="col-md-2">
-            <a class="btn btn-default" href="{% url 'em:stages' %}" role="button">Назад</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Добавить этап</h3>
-                </div>
-                <div class="panel-body">
-                    <form method="post">
-                        {% csrf_token %}
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            {% if form.errors %}
+                {% for error in form.errors %}
+                    <p><strong>{{ error }}</strong></p>
+                {% endfor %}
+            {% endif %}
 
-                        {{ form.non_field_errors }}
-                        <div class="form-group">
-                            {{ form.name.errors }}
-                            <label for="{{ form.name.id_for_label }}">Название</label>
-                            <input type="text" class="form-control" id="{{ form.name.id_for_label }}" name="{{ form.name.html_name }}" required placeholder="Введите название">
-                        </div>
+            <div class="panel-heading">
+                <h3 class="panel-title">Добавить этап</h3>
+            </div>
+            <div class="panel-body">
+                <form method="post">
+                    {% csrf_token %}
 
-                        <div class="form-group">
-                            {{ form.info.errors }}
-                            <label for="{{ form.info.id_for_label }}">Информация</label>
-                            <input type="text" class="form-control" id="{{ form.info.id_for_label }}" name="{{ form.info.html_name }}" required placeholder="Дополнитнльно">
-                        </div>
+                    {{ form.non_field_errors }}
+                    <div class="form-group">
+                        <label for="{{ form.name.id_for_label }}">Название</label>
+                        {{ form.name }}
+                    </div>
 
-                        <div class="form-group">
-                            {{ form.date_start.errors }}
-                            <label for="{{ form.date_start.id_for_label }}">Начало</label>
-                            <input type="datetime-local" class="form-control" id="{{ form.date_start.id_for_label }}" name="{{ form.date_start.html_name }}" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="{{ form.info.id_for_label }}">Информация</label>
+                        {{ form.info }}
+                    </div>
 
-                        <div class="form-group">
-                            {{ form.date_end.errors }}
-                            {{ form.date_end }}
-                            <label for="{{ form.date_end.id_for_label }}">Конец</label>
-                            <input type="datetime-local" class="form-control" id="{{ form.date_end.id_for_label }}" name="{{ form.date_end.html_name }}" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="{{ form.date_start.id_for_label }}">Начало</label>
+                        {{ form.date_start }}
+                    </div>
 
-                        <button class="btn btn-primary" type="submit">добавить этап</button>
-                    </form>
-                </div>
+                    <div class="form-group">
+                        <label for="{{ form.date_end.id_for_label }}">Конец</label>
+                        {{ form.date_end }}
+                    </div>
+
+
+                    <div class="form-group mt-5">
+                        <a class="btn btn-danger float-left" href="{% url 'em:stages' %}" role="button">Назад</a>
+                        <button class="btn btn-success float-right" type="submit">добавить этап</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% endblock %}

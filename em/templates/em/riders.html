@@ -2,7 +2,7 @@
 
 {% block body_block %}
 
-<div class="row">
+<div class="row mt-3">
     <div class="col-md-4">
         <h3>Список райдеров</h3>
         <a class="btn btn-success" role="button" href="{% url 'em:rider_add' %}">
@@ -10,12 +10,12 @@
         </a>
     </div>
 </div>
-<div class="row">
+<div class="row mt-3">
     <div class="col-md-12">
-        <table class="table table-hover">
-            <thead class="text-uppercase">
+        <table class="table table-hover table-responsive table-bordered">
+            <thead class="text-uppercase bg-light">
                 <tr>
-                    <th class="col-md-1 col-sm-1">фото</th>
+                    <th class="col-md-1">фото</th>
                     <th class="col-md-10 text-center">имя</th>
                     <th class="col-md-1">дополнительно</th>
                 </tr>
@@ -26,10 +26,10 @@
             <tr>
                 <td>
                     {% if rider.photo %}
-                        <img class="img-thumbnail img-responsive" src="{{ rider.photo.url }}" alt="rider_avatar">
+                        <img class="img-fluid img-thumbnail" src="{{ rider.photo.url }}" alt="rider_avatar">
                         {% else %}
                         {% load static %}
-                        <img class="img-thumbnail img-responsive" src="{% static 'em/img/default_avatar.png' %}" alt="rider_avatar">
+                        <img class="img-fluid img-thumbnail" src="{% static 'em/img/default_avatar.png' %}" alt="rider_avatar">
                     {% endif %}
                 </td>
                 <td class="text-center"><h4>{{ rider.name }}</h4></td>

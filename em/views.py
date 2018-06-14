@@ -1,6 +1,9 @@
+from datetime import datetime
+
 from django.shortcuts import render, redirect
 from django.views import generic
 
+from em.controllers.race_controller import *
 from em.forms import *
 from .models import *
 
@@ -11,8 +14,8 @@ class RidersView(generic.ListView):
 
     def get_queryset(self):
         riders = Rider.objects.order_by('id')[:]
-        stages = Stage.objects.order_by('date_start')[:]
-        return {'riders': riders, 'stages': stages};
+        stage = Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now())[:1].get()
+        return {'riders': riders, 'stage': stage}
 
 
 class RiderDetailsView(generic.DetailView):
@@ -28,21 +31,17 @@ class StagesView(generic.ListView):
         return Stage.objects.order_by('date_start')[:]
 
 
-def StageDetailsView(request, pk):
-    stage = Stage.objects.get(id = pk)
-    riders_in_stage = Riders_And_Stage.objects.filter(stage = stage)
+def stage_details(request, pk):
+    stage = Stage.objects.get(id=pk)
+    riders_in_stage = RiderAndStage.objects.filter(stage=stage)
     riders = []
     for rider_in_stage in riders_in_stage:
-        print(rider_in_stage.rider)
-
         rider = Rider.objects.get(id=rider_in_stage.rider.id)
-        
         riders.append({
             'id': rider.id,
             'name': rider.name,
             'photo': rider.photo
         })
-
     return render(request, 'stage_details.html', {'riders': riders, 'stage': stage})
 
 
@@ -66,13 +65,25 @@ def rider_add(request):
         'form': form
     })
 
+
 def rider_stage_assign(request, rider_id, stage_id):
-    rider = Rider.objects.get(id = rider_id)
-    stage = Stage.objects.get(id = stage_id)
-    if (Riders_And_Stage.objects.filter(rider = rider, stage = stage) is None):
-        print('tst')
-        Riders_And_Stage(rider = rider, stage = stage).save()
+    rider = Rider.objects.get(id=rider_id)
+    stage = Stage.objects.get(id=stage_id)
+    if RiderAndStage.objects.filter(rider=rider, stage=stage).count() == 0:
+        RiderAndStage(rider=rider, stage=stage).save()
     return redirect('em:riders')
+
+
+def rider_stage_unassign(request, rider_id, stage_id):
+    rider = Rider.objects.get(id=rider_id)
+    stage = Stage.objects.get(id=stage_id)
+    RiderAndStage.objects.get(rider=rider, stage=stage).delete()
+    return redirect('em:stage_details', stage_id)
+
+
+def rider_prepare_to_race(request, rider_id):
+    set_rider_ready(rider_id)
+    return redirect('em:rider_details', rider_id)
 
 
 def stage_add(request):

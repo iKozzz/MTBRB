@@ -9,10 +9,12 @@ urlpatterns = [
     path('', views.RidersView.as_view(), name='riders'),
     path('rider_details/<int:pk>', views.RiderDetailsView.as_view(), name='rider_details'),
     path('rider_add/', views.rider_add, name='rider_add'),
+    path('rider_prepare_to_race/<int:rider_id>', views.rider_prepare_to_race, name='rider_prepare_to_race'),
     path('rider_stage_assign/<int:rider_id>/<int:stage_id>', views.rider_stage_assign, name='rider_stage_assign'),
+    path('rider_stage_unassign/<int:rider_id>/<int:stage_id>', views.rider_stage_unassign, name='rider_stage_unassign'),
 
     path('stages/', views.StagesView.as_view(), name='stages'),
-    path('stage_details/<int:pk>', views.StageDetailsView, name='stage_details'),
+    path('stage_details/<int:pk>', views.stage_details, name='stage_details'),
     path('stage_add/', views.stage_add, name='stage_add'),
 
     path('liderboard/', views.LiderboardView.as_view(), name='liderboard'),

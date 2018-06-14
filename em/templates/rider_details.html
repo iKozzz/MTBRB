@@ -5,7 +5,9 @@
 <div class="container">
     <div class="col-md-12">
         <div class="row">
-            <img class="img-responsive img-rounded" src="{{ rider.photo.url }}" alt="rider_photo">
+            {% if rider.photo %}
+                <img class="img-responsive img-rounded" src="{{ rider.photo.url }}" alt="rider_photo">
+            {% endif %}
         </div>
         <div class="row">
             <h1 class="text-primary text-center">{{ rider.name }}</h1>

@@ -7,10 +7,12 @@ from .models import *
 
 class RidersView(generic.ListView):
     template_name = 'riders.html'
-    context_object_name = 'riders_list'
+    context_object_name = 'data'
 
     def get_queryset(self):
-        return Rider.objects.order_by('id')[:]
+        riders = Rider.objects.order_by('id')[:]
+        stages = Stage.objects.order_by('date_start')[:]
+        return {'riders': riders, 'stages': stages};
 
 
 class RiderDetailsView(generic.DetailView):
@@ -26,9 +28,22 @@ class StagesView(generic.ListView):
         return Stage.objects.order_by('date_start')[:]
 
 
-class StageDetailsView(generic.DetailView):
-    model = Stage
-    template_name = 'stage_details.html'
+def StageDetailsView(request, pk):
+    stage = Stage.objects.get(id = pk)
+    riders_in_stage = Riders_And_Stage.objects.filter(stage = stage)
+    riders = []
+    for rider_in_stage in riders_in_stage:
+        print(rider_in_stage.rider)
+
+        rider = Rider.objects.get(id=rider_in_stage.rider.id)
+        
+        riders.append({
+            'id': rider.id,
+            'name': rider.name,
+            'photo': rider.photo
+        })
+
+    return render(request, 'stage_details.html', {'riders': riders, 'stage': stage})
 
 
 class LiderboardView(generic.ListView):
@@ -50,6 +65,14 @@ def rider_add(request):
     return render(request, 'rider_add_form.html', {
         'form': form
     })
+
+def rider_stage_assign(request, rider_id, stage_id):
+    rider = Rider.objects.get(id = rider_id)
+    stage = Stage.objects.get(id = stage_id)
+    if (Riders_And_Stage.objects.filter(rider = rider, stage = stage) is None):
+        print('tst')
+        Riders_And_Stage(rider = rider, stage = stage).save()
+    return redirect('em:riders')
 
 
 def stage_add(request):

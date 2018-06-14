@@ -21,4 +21,51 @@
     </div>
 </div>
 
+<div class="row mt-3">
+    <div class="col-md-12">
+        <table class="table table-hover table-responsive table-bordered">
+            <thead class="text-uppercase bg-light">
+                <tr>
+                    <th class="col-md-1">фото</th>
+                    <th class="col-md-10 text-center">имя</th>
+                    <th class="col-md-1">дополнительно</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% if riders %}
+            {% for rider in riders %}
+
+            {{rider}}
+
+            <tr>
+                <td class="">
+                    {% if rider.photo %}
+                        <div class="icon">
+                            <img class="img-fluid img-thumbnail" src="{{ rider.photo.url }}" alt="rider_avatar">
+                        </div>
+                    {% else %}
+                        <div class="icon">
+                            {% load static %}
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    <a href="{% url 'em:rider_details' rider.id %}">{{ rider.name }}</a>
+                </td>
+                <td>
+                    <a class="btn btn-info text-uppercase" href="{% url 'em:rider_stage_assign' rider.id 1 %}" role="button"><i class="fas fa-info-circle mr-2"></i>добавить</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr class="row">
+                <td class="text-center text-info text-uppercase">пусто</td>
+            </tr>
+            {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
 {% endblock %}

@@ -8,6 +8,14 @@
         <a class="btn btn-success" role="button" href="{% url 'em:rider_add' %}">
             <i class="fas fa-plus-square"></i> Добавиь райдера
         </a>
+        {% if data.stages %}
+        <select>
+            <option>Select Stage</option>
+            {% for stage in data.stages %}
+                <option>{{stage.name}}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
     </div>
 </div>
 <div class="row mt-3">
@@ -21,8 +29,8 @@
                 </tr>
             </thead>
             <tbody>
-            {% if riders_list %}
-            {% for rider in riders_list %}
+            {% if data.riders %}
+            {% for rider in data.riders %}
             <tr>
                 <td class="">
                     {% if rider.photo %}
@@ -36,9 +44,11 @@
                         </div>
                     {% endif %}
                 </td>
-                <td class="text-center"><h4>{{ rider.name }}</h4></td>
+                <td class="text-center">
+                    <a href="{% url 'em:rider_details' rider.id %}">{{ rider.name }}</a>
+                </td>
                 <td>
-                    <a class="btn btn-info text-uppercase" href="{% url 'em:rider_details' rider.id %}" role="button"><i class="fas fa-info-circle"></i> подробнее</a>
+                    <a class="btn btn-info text-uppercase" href="{% url 'em:rider_stage_assign' rider.id 1 %}" role="button"><i class="fas fa-info-circle mr-2"></i>добавить</a>
                 </td>
             </tr>
             {% endfor %}

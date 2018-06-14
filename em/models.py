@@ -19,3 +19,8 @@ class Stage(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Riders_And_Stage(models.Model):
+    rider = models.ForeignKey(Rider, on_delete=models.CASCADE)
+    stage = models.ForeignKey(Stage, on_delete=models.CASCADE)

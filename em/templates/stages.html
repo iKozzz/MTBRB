@@ -1,42 +1,44 @@
 {% extends 'base.html' %}
 
 {% block body_block %}
-<div class="row mt-3">
-    <div class="col-md-4">
-        <h3>Список этапов</h3>
-        <a class="btn btn-success" role="button" href="{% url 'em:stage_add' %}">
+
+<div class="mt-3">
+    <div class="row">
+        <h3 class="mx-auto">Список этапов</h3>
+        <a class="w-100 btn btn-success" role="button" href="{% url 'em:stage_add' %}">
             <i class="fas fa-plus-square"></i> Добавиь этап
         </a>
     </div>
 </div>
-<div class="row mt-3">
-    <div class="col-md-12">
-        <table class="table table-hover table-responsive table-bordered">
-            <thead class="text-uppercase bg-light">
-                <tr>
-                    <th class="col-md-6">название</th>
-                    <th class="col-md-5">дата начала</th>
-                    <th class="col-md-1">дополнительно</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% if stages_list %}
-            {% for stage in stages_list %}
-            <tr>
-                <td>{{ stage.name }}</td>
-                <td>{{ stage.date_start }}</td>
-                <td>
-                    <a class="btn btn-info text-uppercase" href="{% url 'em:stage_details' stage.id %}" role="button"><i class="fas fa-info-circle"></i> подробнее</a>
-                </td>
-            </tr>
-            {% endfor %}
-            {% else %}
-            <tr class="row">
-                <td class="text-center text-info text-uppercase">stages list is empty</td>
-            </tr>
-            {% endif %}
-            </tbody>
-        </table>
+<div class="mt-3">
+    {% if stages_list %}
+    {% for stage in stages_list %}
+    <div class="row bg-light border border-info my-2 p-2">
+        <div class="col-sm-12">
+            <h4>
+                {{ stage.name }}
+            </h4>
+        </div>
+        <div class="col-sm-12">
+            Начало:
+            <h5>
+                {{ stage.date_start }}
+            </h5>
+        </div>
+        <div class="col-sm-12">
+            <a class="w-100 mx-auto btn btn-info" href="{% url 'em:stage_details' stage.id %}" role="button"><i class="fas fa-info-circle"></i> подробнее</a>
+        </div>
     </div>
+    {% endfor %}
+    {% else %}
+    <div class="row bg-light border border-info bg-light my-2 p-2">
+        <div class="col-sm-12">
+            <a class="w-100 mx-auto text-uppercase" role="button" href="{% url 'em:stage_add' %}">
+                <i class="fas fa-info-circle"></i>
+                нужно добавить этап
+            </a>
+        </div>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

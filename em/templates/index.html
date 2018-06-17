@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+<div class="row">
+    <h3 class="mx-auto">MTBRB</h3>
+</div>
+
+<div class="row">
+    <h5 class="mx-auto">Event Time Tracking System</h5>
+</div>
+
+<div class="row my-2">
+    <a class="w-100 btn btn-success" role="button" href="{% url 'em:rider_add' %}">
+        <i class="fas fa-plus-square"></i> Добавить райдера
+    </a>
+</div>
+
+<div class="row my-2">
+    <a class="w-100 btn btn-success" role="button" href="{% url 'em:stage_add' %}">
+        <i class="fas fa-plus-square"></i> Добавить этап
+    </a>
+</div>
+
+<div class="row my-2">
+    <a class="w-100 btn btn-success" role="button" href="{% url 'em:race_add' %}">
+        <i class="fas fa-plus-square"></i> Добавить гонку
+    </a>
+</div>
+
+{% endblock %}

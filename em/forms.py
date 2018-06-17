@@ -36,6 +36,35 @@ class RiderAddForm(ModelForm):
         fields = ['name', 'info', 'photo']
 
 
+class RaceAddForm(ModelForm):
+    name = CharField(
+        widget=TextInput(
+            attrs={
+                'class': 'form-control',
+                'type': 'text',
+                'placeholder': 'Введите имя'
+            }
+        )
+    )
+    info = CharField(
+        widget=TextInput(
+            attrs={
+                'class': 'form-control',
+                'type': 'text',
+                'placeholder': 'Дополнительная информация'
+            }
+        ),
+        required=False
+    )
+    isCountingTime = FileField(
+        widget=ChoiceField()
+    )
+
+    class Meta:
+        model = Race
+        fields = ['name', 'info', 'isCountingTime']
+
+
 class StageAddForm(ModelForm):
     name = CharField(
         widget=TextInput(

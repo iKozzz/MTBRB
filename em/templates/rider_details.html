@@ -2,39 +2,52 @@
 
 {% block body_block %}
 
-<div class="container">
-    <div class="row mt-3">
-        <div class="col-md-4">
-            <a class="btn btn-success mb-2" role="button" href="{% url 'em:riders' %}">
-                <i class="fas fa-arrow-left"></i> назад
-            </a>
-            <a class="btn btn-info mb-2" role="button" href="{% url 'em:rider_prepare_to_race' rider.id %}">
-                <i class="fas fa-flag"></i> приготовить к старту
-            </a>
-            <h3>Подробнее о райдере</h3>
+<div class="row mt-3">
+    <div class="col-sm-6">
+        <a class="btn btn-success mb-2 col-sm-12" href="{% url 'em:riders' %}">
+            <i class="fas fa-arrow-left mr-2"></i>назад
+        </a>
+    </div>
+    <div class="col-sm-6">
+        <a class="btn btn-info mb-2 col-sm-12" href="{% url 'em:rider_prepare_to_race' rider.id %}">
+            <i class="fas fa-flag mr-2"></i>приготовить к старту
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <h3 class="mx-auto">Подробнее о райдере</h3>
+</div>
+
+<div class="row mt-3">
+    <div class="col-sm-6">
+        {% if rider.photo %}
+            <img class="img-fluid img-thumbnail" src="{{ rider.photo.url }}" alt="rider_photo">
+        {% endif %}
+    </div>
+
+    <div class="col-sm-6 bg-light mt-3">
+        <div class="mx-auto">
+            <h2 class="text-center">{{ rider.name }}</h2>
+        </div>
+
+        <div class="p-2">
+            <h6>Информация:</h6>
+            <p class="text-justify mt-3">{{ rider.info }}</p>
         </div>
     </div>
-    {% if rider %}
-        <div class="row mt-3">
-            <div class="col-md-6">
-                <p>
-                    {{ rider.id }}
-                </p>
-            </div>
-        </div>
-    {% endif %}
-    <div class="row mt-3">
-        <div class="col-md-6">
-            {% if rider.photo %}
-                <img class="img-responsive img-rounded" src="{{ rider.photo.url }}" alt="rider_photo">
-            {% endif %}
-        </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-sm-6 mx-auto">
+        <button class="w-100 button btn-danger" onclick="$('#delete-riderId-{{ rider.id }}').toggle();">
+            Удалить райдера?
+        </button>
     </div>
-    <div class="row">
-        <h1 class="text-primary text-center">{{ rider.name }}</h1>
-    </div>
-    <div class="row">
-        <h4 class="text-justify">{{ rider.info }}</h4>
+    <div class="col-sm-6 mx-auto mt-3" id="delete-riderId-{{ rider.id }}" style="display: none">
+        <a class="button btn-secondary text-white px-3 py-2" href="{% url 'em:rider_delete' rider.id %}">
+            подтвердить
+        </a>
     </div>
 </div>
 

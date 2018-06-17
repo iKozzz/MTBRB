@@ -22,7 +22,6 @@ urlpatterns = [
     path('stage_details/<int:pk>', views.stage_details, name='stage_details'),
     path('stage_add/', views.stage_add, name='stage_add'),
     path('stage_delete/<int:stage_id>', views.stage_delete, name='stage_delete'),
-    path('rider_delete/<int:rider_id>', views.rider_delete, name='rider_delete'),
 
     path('races/', views.RacesView.as_view(), name='races'),
     path('race_details/<int:pk>', views.race_details, name='race_details'),

@@ -11,16 +11,6 @@ class Rider(models.Model):
         return self.name
 
 
-class Race(models.Model):
-    name = models.CharField(max_length=100)
-    info = models.CharField(max_length=1000, blank=True)
-    isCountingTime = models.BooleanField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Ride(models.Model):
     rider_id = models.ForeignKey(Rider, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
@@ -36,6 +26,22 @@ class Stage(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Race(models.Model):
+    name = models.CharField(max_length=100)
+    info = models.CharField(max_length=1000, blank=True)
+    isCountingTime = models.BooleanField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
+RACE_TYPE_CHOICES = (
+    (True, 'время'),
+    (False, 'баллы'),
+)
 
 
 class RiderAndStage(models.Model):

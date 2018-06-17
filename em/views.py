@@ -53,23 +53,25 @@ def stage_details(request, pk):
 
 class RacesView(generic.ListView):
     template_name = 'races.html'
-    context_object_name = 'races_list'
+    context_object_name = 'data'
 
     def get_queryset(self):
-        return Race.objects.order_by('id')[:]
+        races = Race.objects.order_by('id')[:]
+        stage = Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now())[:1].get()
+        return {'races': races, 'stage': stage}
 
 
 def race_details(request, pk):
-    stage = Stage.objects.get(id=pk)
-    races_in_stage = RiderStageRace.objects.filter(stage=stage)
-    races = []
-    for race_in_stage in races_in_stage:
-        race = Race.objects.get(id=race_in_stage.race.id)
-        races.append({
-            'id': race.id,
-            'name': race.name
-        })
-    return render(request, 'race_details.html', {'races': races, 'stage': stage})
+    race = Race.objects.get(id=pk)
+    # races_in_stage = RiderStageRace.objects.filter(race=race)
+    # races = []
+    # for race_in_stage in races_in_stage:
+    #     race = Race.objects.get(id=race_in_stage.race.id)
+    #     races.append({
+    #         'id': race.id,
+    #         'name': race.name
+    #     })
+    return render(request, 'race_details.html', {'race': race, 'stage': None})
 
 
 class LiderboardView(generic.ListView):
@@ -163,10 +165,10 @@ def stage_add(request):
 
 def race_add(request):
     if request.method == 'POST':
-        form = RaceAddForm(request.POST, request.FILES)
+        form = RaceAddForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('em:race')
+            return redirect('em:races')
     else:
         form = RaceAddForm()
     return render(request, 'race_add_form.html', {

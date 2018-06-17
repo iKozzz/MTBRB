@@ -8,65 +8,7 @@
     </div>
     <div class="row bg-light py-2">
         <h5 class="mx-auto">Информания</h5>
-        <div class="col-sm-12 text-justify">{{ stage.info }}</div>
-    </div>
-</div>
-
-<div>
-    <div class="row my-2 px-2 border-top">
-        <h6 class="mt-3">Райдеры этапа:</h6>
-    </div>
-    {% if riders %}
-    {% for rider in riders %}
-     <div class="row border border-info my-2 p-2">
-        <div class="col-sm-12">
-            {% if rider.photo %}
-                <img class="img-fluid img-thumbnail" src="{{ rider.photo.url }}" alt="rider_avatar">
-            {% else %}
-                <i class="fas fa-user-circle"></i>
-            {% endif %}
-        </div>
-        <div class="col-sm-12">
-            <a class="w-100 btn btn-warning mt-1 mb-3" href="{% url 'em:rider_details' rider.id %}">
-                <h3>{{ rider.name }}</h3>
-            </a>
-        </div>
-        <div class="col-sm-12">
-            <div class="col-sm-6 mx-auto">
-                <button class="w-100 button btn-danger" onclick="$('#kick-{{ rider.id }}').toggle();">
-                    Убрать райдера из этапа?
-                </button>
-            </div>
-            <div class="col-sm-6 mx-auto mt-3" id="kick-{{ rider.id }}" style="display: none">
-                <a class="button btn-secondary text-white px-3 py-2" href="{% url 'em:rider_stage_unassign' rider.id stage.id %}">
-                    подтвердить
-                </a>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-    {% else %}
-    <div class="row bg-light border border-info bg-light my-2 p-2">
-        <div class="col-sm-12">
-            <a class="w-100 mx-auto text-uppercase" role="button" href="{% url 'em:riders' %}">
-                <i class="fas fa-info-circle"></i>
-                нужно добавить участников
-            </a>
-        </div>
-    </div>
-    {% endif %}
-</div>
-
-<div class="row mt-3">
-    <div class="col-sm-6 mx-auto">
-        <button class="w-100 button btn-danger" onclick="$('#delete-stageId-{{ stage.id }}').toggle();">
-            Удалить этап?
-        </button>
-    </div>
-    <div class="col-sm-6 mx-auto mt-3" id="delete-stageId-{{ stage.id }}" style="display: none">
-        <a class="button btn-secondary text-white px-3 py-2" href="{% url 'em:stage_delete' stage.id %}">
-            подтвердить
-        </a>
+        <div class="col-sm-12 text-justify">{{ race.info }}</div>
     </div>
 </div>
 

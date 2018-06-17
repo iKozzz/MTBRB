@@ -4,15 +4,15 @@
 
 <div class="mt-3">
     <div class="row">
-        <h3 class="mx-auto">Список заездов этапа</h3>
+        <h3 class="mx-auto">Список гонок этапа: <a href="{% url 'em:stage_details' data.stage.id %}"><span class="text-info">{{ data.stage.name }}</span></a></h3>
         <a class="w-100 btn btn-success" role="button" href="{% url 'em:race_add' %}">
-            <i class="fas fa-plus-square"></i> Добавиь заезд
+            <i class="fas fa-plus-square"></i> Добавиь гонку
         </a>
     </div>
 </div>
 <div class="mt-3">
-    {% if races_list %}
-    {% for race in races_list %}
+    {% if data.races %}
+    {% for race in data.races %}
     <div class="row bg-light border border-info my-2 p-2">
         <div class="col-sm-12">
             <h4>
@@ -29,7 +29,7 @@
         <div class="col-sm-12">
             <a class="w-100 mx-auto text-uppercase" role="button" href="{% url 'em:race_add' %}">
                 <i class="fas fa-info-circle"></i>
-                нужно добавить заезд
+                нужно добавить гонку
             </a>
         </div>
     </div>

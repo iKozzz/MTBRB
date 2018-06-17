@@ -56,8 +56,8 @@ class RaceAddForm(ModelForm):
         ),
         required=False
     )
-    isCountingTime = FileField(
-        widget=ChoiceField()
+    isCountingTime = CharField(
+        widget=Select(choices=RACE_TYPE_CHOICES)
     )
 
     class Meta:

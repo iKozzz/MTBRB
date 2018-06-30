@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.shortcuts import render, redirect
 from django.views import generic
@@ -20,7 +20,10 @@ class RidersView(generic.ListView):
         riders = Rider.objects.order_by('id')[:]
         stage = None
         if Stage.objects.exists():
-            stage = Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now())[:1].get()
+            if Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now()-timedelta(days=3)).exists():
+                stage = Stage.objects.order_by('date_start').filter(
+                    date_start__gte=datetime.now()-timedelta(days=3)
+                )[:1].get()
         return {'riders': riders, 'stage': stage}
 
 
@@ -40,46 +43,48 @@ class StagesView(generic.ListView):
 def stage_details(request, pk):
     stage = Stage.objects.get(id=pk)
     riders_in_stage = RiderAndStage.objects.filter(stage=stage)
+    races = Race.objects.filter(stage_id=pk)
     riders = []
     for rider_in_stage in riders_in_stage:
         rider = Rider.objects.get(id=rider_in_stage.rider.id)
         riders.append({
             'id': rider.id,
-            'name': rider.name,
-            'photo': rider.photo
+            'name': rider.name
         })
-    return render(request, 'stage_details.html', {'riders': riders, 'stage': stage})
+    return render(request, 'stage_details.html', {'riders': riders, 'stage': stage, 'races': races})
 
 
-class RacesView(generic.ListView):
-    template_name = 'races.html'
-    context_object_name = 'data'
-
-    def get_queryset(self):
-        races = Race.objects.order_by('id')[:]
-        stage = Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now())[:1].get()
-        return {'races': races, 'stage': stage}
-
-
-def race_details(request, pk):
-    race = Race.objects.get(id=pk)
-    # races_in_stage = RiderStageRace.objects.filter(race=race)
-    # races = []
-    # for race_in_stage in races_in_stage:
-    #     race = Race.objects.get(id=race_in_stage.race.id)
-    #     races.append({
-    #         'id': race.id,
-    #         'name': race.name
-    #     })
-    return render(request, 'race_details.html', {'race': race, 'stage': None})
+def race_details(request, pk, stage_id):
+    race = None
+    stage = Stage.objects.get(id=stage_id)
+    riders_in_stage = RiderAndStage.objects.filter(stage=stage)
+    if Race.objects.exists():
+        race = Race.objects.get(id=pk)
+    riders = []
+    for rider_in_stage in riders_in_stage:
+        rider = Rider.objects.get(id=rider_in_stage.rider.id)
+        riders.append({
+            'id': rider.id,
+            'name': rider.name
+        })
+    results = Result.objects.filter(stage_id=stage_id, race_id=race)
+    return render(request, 'race_details.html', {'riders': riders, 'stage': stage, 'race': race, 'results': results})
 
 
 class LiderboardView(generic.ListView):
-    model = Rider
     template_name = 'liderboard.html'
+    context_object_name = 'data'
 
     def get_queryset(self):
-        return Rider.objects.order_by('created_at')[:]
+        riders = Rider.objects.order_by('id')[:]
+        stage = None
+        results = None
+        if Stage.objects.exists():
+            if Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now() - timedelta(days=3)).exists():
+                stage = Stage.objects.order_by('date_start').filter(
+                    date_start__gte=datetime.now() - timedelta(days=3)
+                )[:1].get()
+        return {'riders': riders, 'stage': stage, 'results': results}
 
 
 def rider_add(request):
@@ -110,23 +115,6 @@ def rider_stage_unassign(request, rider_id, stage_id):
     return redirect('em:stage_details', stage_id)
 
 
-def rider_race_assign(request, rider_id, stage_id, race_id):
-    rider = Rider.objects.get(id=rider_id)
-    stage = Stage.objects.get(id=stage_id)
-    race = Race.objects.get(id=race_id)
-    if RiderStageRace.objects.filter(rider=rider, stage=stage, race=race).count() == 0:
-        RiderStageRace(rider=rider, stage=stage, race=race).save()
-    return redirect('em:races')
-
-
-def rider_race_unassign(request, rider_id, stage_id, race_id):
-    rider = Rider.objects.get(id=rider_id)
-    stage = Stage.objects.get(id=stage_id)
-    race = Race.objects.get(id=race_id)
-    RiderStageRace.objects.get(rider=rider, stage=stage, race=race).delete()
-    return redirect('em:race_details', race_id)
-
-
 def rider_delete(request, rider_id):
     rider = Rider.objects.get(id=rider_id)
     Rider.objects.get(id=rider.id).delete()
@@ -139,15 +127,15 @@ def stage_delete(request, stage_id):
     return redirect('em:stages')
 
 
-def race_delete(request, race_id):
+def race_delete(request, race_id, stage_id):
     race = Race.objects.get(id=race_id)
     Race.objects.get(id=race.id).delete()
-    return redirect('em:stages')
+    return redirect('em:stage_details', stage_id)
 
 
-def rider_prepare_to_race(request, rider_id):
+def rider_prepare_to_race(request, rider_id, race_id, stage_id):
     set_rider_ready(rider_id)
-    return redirect('em:rider_details', rider_id)
+    return redirect('em:race_details', race_id, stage_id)
 
 
 def stage_add(request):
@@ -163,14 +151,16 @@ def stage_add(request):
     })
 
 
-def race_add(request):
+def race_add(request, stage_id):
+    stage = Stage.objects.get(id=stage_id)
     if request.method == 'POST':
         form = RaceAddForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('em:races')
+            return redirect('em:stage_details', stage_id)
     else:
         form = RaceAddForm()
     return render(request, 'race_add_form.html', {
-        'form': form
+        'form': form,
+        'stage': stage
     })

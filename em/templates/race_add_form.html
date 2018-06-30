@@ -6,7 +6,7 @@
     <div class="col-md-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Добавить гонку этапа</h3>
+                <h3 class="panel-title">Добавить гонку этапа: {{ stage.name }}</h3>
             </div>
             <div class="panel-body">
                 {% if form.errors %}
@@ -17,24 +17,32 @@
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 
+                    <div class="form-group" style="display: none">
+                        <label for="{{ form.stage_id.id_for_label }}">stage_id</label>
+                        {{ form.stage_id.errors }}
+                        <input id="{{ form.stage_id.id_for_label }}" name="{{ form.stage_id.html_name }}" value="{{ stage.id }}">
+                    </div>
+
                     <div class="form-group">
-                        {{ form.name.errors }}
                         <label for="{{ form.name.id_for_label }}">Название</label>
+                        {{ form.name.errors }}
                         {{ form.name }}
                     </div>
 
                     <div class="form-group">
                         <label for="{{ form.info.id_for_label }}">Информация</label>
+                        {{ form.info.errors }}
                         {{ form.info }}
                     </div>
 
                     <div class="form-group">
                         <label for="{{ form.isCountingTime.id_for_label }}">Тип гонки</label>
+                        {{ form.isCountingTime.errors }}
                         {{ form.isCountingTime }}
                     </div>
 
                     <div class="form-group mt-5">
-                        <a class="btn btn-danger float-left text-uppercase" href="{% url 'em:races' %}" role="button"><i class="fas fa-times-circle mr-2"></i> отмена</a>
+                        <a class="btn btn-danger float-left text-uppercase" href="{% url 'em:stage_details' stage.id %}" role="button"><i class="fas fa-times-circle mr-2"></i> отмена</a>
                         <button class="btn btn-success float-right text-uppercase" type="submit"><i class="fas fa-check-circle mr-2"></i>добавить гонку</button>
                     </div>
                 </form>

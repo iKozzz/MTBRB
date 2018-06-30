@@ -2,14 +2,35 @@
 
 {% block body_block %}
 
+
+<div class="row">
+    <h1 class="mx-auto">{{ race.name }}</h1>
+</div>
+<div class="row bg-light py-2">
+    <h5 class="mx-auto"><label class="badge-info rounded px-2">Гонка на {% if race.isCountingTime %}время{% else %}баллы{% endif %}</label></h5>
+    <div class="col-sm-12 text-justify">{{ race.info }}</div>
+</div>
+
 <div>
-    <div class="row">
-        <h1 class="mx-auto">{{ race.name }}</h1>
+    <div class="row my-2 px-2 border-top">
+        <h6 class="mt-3">Райдеры:</h6>
     </div>
-    <div class="row bg-light py-2">
-        <h5 class="mx-auto">Информания</h5>
-        <div class="col-sm-12 text-justify">{{ race.info }}</div>
+    {% if riders %}
+    {% for rider in riders %}
+     <div class="row border border-info my-2 p-2">
+        <div class="col-sm-12">
+            <a class="w-100 btn btn-secondary mt-1 mb-3" href="{% url 'em:rider_details' rider.id %}">
+                <h3>{{ rider.name }}</h3>
+            </a>
+        </div>
+         <div class="col-sm-6">
+            <a class="btn btn-info mb-2 col-sm-12" href="{% url 'em:rider_prepare_to_race' rider.id race.id stage.id%}">
+                <i class="fas fa-flag mr-2"></i>приготовить к старту
+            </a>
+        </div>
     </div>
+    {% endfor %}
+    {% endif %}
 </div>
 
 {% endblock %}

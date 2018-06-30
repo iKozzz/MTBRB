@@ -5,7 +5,7 @@
 <div class="mt-3">
     <div class="row">
         <h3 class="mx-auto">Список этапов</h3>
-        <a class="w-100 btn btn-success" role="button" href="{% url 'em:stage_add' %}">
+        <a class="w-100 btn btn-success mx-3" role="button" href="{% url 'em:stage_add' %}">
             <i class="fas fa-plus-square"></i> Добавиь этап
         </a>
     </div>
@@ -13,7 +13,7 @@
 <div class="mt-3">
     {% if stages_list %}
     {% for stage in stages_list %}
-    <div class="row bg-light border border-info my-2 p-2">
+    <div class="row bg-light border border-secondary my-2 mx-1 p-2">
         <div class="col-sm-12">
             <h4>
                 {{ stage.name }}
@@ -31,13 +31,11 @@
     </div>
     {% endfor %}
     {% else %}
-    <div class="row bg-light border border-info bg-light my-2 p-2">
-        <div class="col-sm-12">
-            <a class="w-100 mx-auto text-uppercase" role="button" href="{% url 'em:stage_add' %}">
-                <i class="fas fa-info-circle"></i>
+    <div class="mx-3 my-5">
+        <a class="w-100 btn btn-info text-uppercase" role="button" href="{% url 'em:stage_add' %}">
+            <i class="fas fa-info-circle"></i>
                 нужно добавить этап
-            </a>
-        </div>
+        </a>
     </div>
     {% endif %}
 </div>

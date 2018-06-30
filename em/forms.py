@@ -3,6 +3,17 @@ from em.models import *
 
 
 class RiderAddForm(ModelForm):
+    number = IntegerField(
+        widget=TextInput(
+            attrs={
+                'class': 'form-control',
+                'type': 'number',
+                'maxlength': '3',
+                'size': '3',
+                'placeholder': 'Номер участника'
+            }
+        )
+    )
     name = CharField(
         widget=TextInput(
             attrs={
@@ -33,7 +44,7 @@ class RiderAddForm(ModelForm):
 
     class Meta:
         model = Rider
-        fields = ['name', 'info', 'photo']
+        fields = ['number', 'name', 'info', 'photo']
 
 
 class RaceAddForm(ModelForm):

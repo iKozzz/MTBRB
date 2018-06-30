@@ -48,6 +48,7 @@ def stage_details(request, pk):
     for rider_in_stage in riders_in_stage:
         rider = Rider.objects.get(id=rider_in_stage.rider.id)
         riders.append({
+            'number': rider.number,
             'id': rider.id,
             'name': rider.name
         })
@@ -64,6 +65,7 @@ def race_details(request, pk, stage_id):
     for rider_in_stage in riders_in_stage:
         rider = Rider.objects.get(id=rider_in_stage.rider.id)
         riders.append({
+            'number': rider.number,
             'id': rider.id,
             'name': rider.name
         })

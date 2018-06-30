@@ -6,11 +6,20 @@ RACE_TYPE_CHOICES = (
     (False, 'баллы'),
 )
 
+RACE_STATUSES = (
+    (0, 'OK'),
+    (1, 'DNS'),
+    (2, 'DNF'),
+    (3, 'DSQ'),
+    (4, 'DRP'),
+)
+
 
 class Rider(models.Model):
+    number = models.CharField(max_length=3)
     name = models.CharField(max_length=100)
     info = models.CharField(max_length=1000, blank=True)
-    photo = models.ImageField(upload_to='rider_avatars')
+    photo = models.ImageField(upload_to='rider_avatars', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

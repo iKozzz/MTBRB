@@ -2,37 +2,34 @@
 
 {% block body_block %}
 
-<div class="row">
-    <h3 class="mx-auto">Подробнее о райдере</h3>
+<div class="row mt-3">
+    <div class="mx-auto">
+        <h2>[{{ rider.number }}] {{ rider.name }}</h2>
+    </div>
 </div>
 
 <div class="row mt-3">
-    <div class="col-sm-6">
+    <div class="w-100 mx-2">
         {% if rider.photo %}
             <img class="img-fluid img-thumbnail" src="{{ rider.photo.url }}" alt="rider_photo">
         {% endif %}
     </div>
 
-    <div class="col-sm-6 bg-light mt-3">
-        <div class="mx-auto">
-            <h2 class="text-center">{{ rider.name }}</h2>
-        </div>
-
-        <div class="p-2">
-            <h6>Информация:</h6>
-            <p class="text-justify mt-3">{{ rider.info }}</p>
+    <div class="w-100 mx-2 mt-3">
+        <div class="bg-light">
+            <p class="text-justify m-2">{{ rider.info }}</p>
         </div>
     </div>
 </div>
 
-<div class="row mt-3">
-    <div class="col-sm-6 mx-auto">
-        <button class="w-100 button btn-danger" onclick="$('#delete-riderId-{{ rider.id }}').toggle();">
+<div class="row">
+    <div class="w-100 mx-5 mt-5">
+        <button class="w-100 btn btn-danger" onclick="$('#delete-riderId-{{ rider.id }}').toggle();">
             Удалить райдера?
         </button>
     </div>
-    <div class="col-sm-6 mx-auto mt-3" id="delete-riderId-{{ rider.id }}" style="display: none">
-        <a class="button btn-secondary text-white px-3 py-2" href="{% url 'em:rider_delete' rider.id %}">
+    <div class="mx-auto mt-4" id="delete-riderId-{{ rider.id }}" style="display: none">
+        <a class="w-100 btn btn-outline-danger" href="{% url 'em:rider_delete' rider.id %}">
             подтвердить
         </a>
     </div>

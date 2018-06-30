@@ -13,18 +13,26 @@
                     {% csrf_token %}
 
                     <div class="form-group">
-                        {{ form.name.errors }}
                         <label for="{{ form.name.id_for_label }}">Имя</label>
+                        {{ form.name.errors }}
                         {{ form.name }}
                     </div>
 
                     <div class="form-group">
                         <label for="{{ form.info.id_for_label }}">Информация</label>
+                        {{ form.info.errors }}
                         {{ form.info }}
                     </div>
 
                     <div class="form-group">
+                        <label for="{{ form.number.id_for_label }}">Номер</label>
+                        {{ form.number.errors }}
+                        {{ form.number }}
+                    </div>
+
+                    <div class="form-group">
                         <label for="{{ form.photo.id_for_label }}">Фото</label>
+                        {{ form.photo.errors }}
                         {{ form.photo }}
                     </div>
 

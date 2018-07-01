@@ -76,10 +76,10 @@ def race_details(request, pk, stage_id):
         riders.append({
             'number': rider.number,
             'id': rider.id,
-            'name': rider.name
+            'name': rider.name,
+            'results': Result.objects.filter(stage_id=stage_id, race_id=race, rider_id=rider.id).values().order_by("result_time")
         })
-    results = Result.objects.filter(stage_id=stage_id, race_id=race)
-    return render(request, 'race_details.html', {'riders': riders, 'stage': stage, 'race': race, 'results': results})
+    return render(request, 'race_details.html', {'riders': riders, 'stage': stage, 'race': race})
 
 
 class LiderboardView(generic.ListView):
@@ -146,8 +146,15 @@ def race_delete(request, race_id, stage_id):
     return redirect('em:stage_details', stage_id)
 
 
-def rider_prepare_to_race(request, rider_id, race_id, stage_id):
-    set_rider_ready(rider_id, race_id, stage_id)
+def rider_prepare_to_race_with_time(request, rider_id, race_id, stage_id):
+    set_rider_ready(rider_id, race_id, stage_id, None)
+    return redirect('em:race_details', race_id, stage_id)
+
+
+def rider_prepare_to_race_with_points(request, rider_id, race_id, stage_id):
+    points = int(request.POST.get('points'))
+    if points > 0:
+        set_rider_ready(rider_id, race_id, stage_id, points)
     return redirect('em:race_details', race_id, stage_id)
 
 

@@ -21,13 +21,16 @@ def get_current_timestamp(delta):
     return datetime.now() + timedelta(seconds=delta)
 
 
-def set_rider_ready(rider_id, race_id, stage_id):
+def set_rider_ready(rider_id, race_id, stage_id, points):
     global RIDER_ID
     global RACE_ID
     global STAGE_ID
+    global POINTS
     RIDER_ID = rider_id
     RACE_ID = race_id
     STAGE_ID = stage_id
+    if points is not None:
+        POINTS = points
     # for debug
     race_start()
     race_finish()

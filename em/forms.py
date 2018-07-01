@@ -9,7 +9,6 @@ class RiderAddForm(ModelForm):
                 'class': 'form-control',
                 'type': 'number',
                 'maxlength': '4',
-                'size': '4',
                 'placeholder': 'Номер участника'
             }
         )

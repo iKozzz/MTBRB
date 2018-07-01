@@ -9,11 +9,6 @@
                 <h3 class="panel-title">Добавить гонку этапа: {{ stage.name }}</h3>
             </div>
             <div class="panel-body">
-                {% if form.errors %}
-                    <div class="row bg-warning text-white">
-                    {{ form.errors }}
-                    </div>
-                {% endif %}
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
 

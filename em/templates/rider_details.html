@@ -4,9 +4,16 @@
 
 <div class="row mt-3">
     <div class="mx-auto">
+        <h4 class="text-center mx-auto">райдер</h4>
         <h3 class="text-center mx-auto">{{ rider.name }}</h3>
         <h4 class="text-center mx-auto">- {{ rider.number }} -</h4>
     </div>
+</div>
+
+<div class="row my-3">
+    <a class="w-100 text-center text-primary" href="{% url 'em:riders'%}">
+        <i class="fas fa-arrow-left mr-2"></i>вернуться к списку райдеров
+    </a>
 </div>
 
 <div class="row mt-3">

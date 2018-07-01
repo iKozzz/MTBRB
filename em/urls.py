@@ -12,7 +12,8 @@ urlpatterns = [
     path('rider_details/<int:pk>', views.RiderDetailsView.as_view(), name='rider_details'),
     path('rider_add/', views.rider_add, name='rider_add'),
     path('rider_delete/<int:rider_id>', views.rider_delete, name='rider_delete'),
-    path('rider_prepare_to_race/<int:rider_id>/<int:race_id>/<int:stage_id>', views.rider_prepare_to_race, name='rider_prepare_to_race'),
+    path('rider_prepare_to_race_with_time/<int:rider_id>/<int:race_id>/<int:stage_id>', views.rider_prepare_to_race_with_time, name='rider_prepare_to_race_with_time'),
+    path('rider_prepare_to_race_with_points/<int:rider_id>/<int:race_id>/<int:stage_id>', views.rider_prepare_to_race_with_points, name='rider_prepare_to_race_with_points'),
     path('rider_stage_assign/<int:rider_id>/<int:stage_id>', views.rider_stage_assign, name='rider_stage_assign'),
     path('rider_stage_unassign/<int:rider_id>/<int:stage_id>', views.rider_stage_unassign, name='rider_stage_unassign'),
 

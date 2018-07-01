@@ -4,35 +4,37 @@
 
 
 <div class="row">
-    <h1 class="mx-auto">{{ race.name }}</h1>
+    <h3 class="text-center mx-auto mt-2">{{ race.name }}</h3>
 </div>
 <div class="row bg-light py-2">
     <h5 class="mx-auto"><label class="badge-info rounded px-2">Гонка на {% if race.isCountingTime %}время{% else %}баллы{% endif %}</label></h5>
-    <div class="w-100 mx-2 mt-3">
+    {% if race.info %}
+    <div class="w-100 mx-2">
         <div class="bg-light">
             <p class="text-justify m-2">{{ race.info }}</p>
         </div>
     </div>
+    {%  endif %}
 </div>
 
-<div class="row mx-1 mb-3 mt-3 border border-secondary bg-light">
-    {% if riders %}
+{% if riders %}
+<div class="row mx-1 mb-3 mt-3 border border-secondary rounded bg-info">
+    <h5 class="text-center mx-auto mt-2">управление гонкой</h5>
     {% for rider in riders %}
-     <div class="w-100 border border-secondary my-2 mx-2">
+     <div class="w-100 border border-secondary rounded bg-light my-2 mx-2">
         <div class="mx-3 my-2">
-            <a class="w-100 btn btn-secondary" href="{% url 'em:rider_details' rider.id %}">
-                <h3>[{{ rider.number }}] {{ rider.name }}</h3>
-            </a>
+            <h3 class="text-center mx-auto"><a class="w-100" href="{% url 'em:rider_details' rider.id %}">{{ rider.name }}</a></h3>
+            <h4 class="text-center mx-auto">- {{ rider.number }} -</h4>
         </div>
 
-         <div class="mx-5 mb-2 mt-4">
-            <a class="btn btn-info mb-2 col-sm-12" href="{% url 'em:rider_prepare_to_race' rider.id race.id stage.id%}">
+         <div class="row mx-5 mb-2 mt-4">
+            <a class="btn btn-secondary mb-2 col-sm-12" href="{% url 'em:rider_prepare_to_race' rider.id race.id stage.id%}">
                 <i class="fas fa-flag mr-2"></i>приготовить к старту
             </a>
         </div>
     </div>
     {% endfor %}
-    {% endif %}
 </div>
+{% endif %}
 
 {% endblock %}

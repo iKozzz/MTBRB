@@ -8,8 +8,8 @@ class RiderAddForm(ModelForm):
             attrs={
                 'class': 'form-control',
                 'type': 'number',
-                'maxlength': '3',
-                'size': '3',
+                'maxlength': '4',
+                'size': '4',
                 'placeholder': 'Номер участника'
             }
         )
@@ -36,7 +36,8 @@ class RiderAddForm(ModelForm):
         widget=FileInput(
             attrs={
                 'class': 'form-control',
-                'type': 'file'
+                'type': 'file',
+                'accept': 'image/*'
             }
         ),
         required=False
@@ -54,7 +55,7 @@ class RaceAddForm(ModelForm):
             attrs={
                 'class': 'form-control',
                 'type': 'text',
-                'placeholder': 'Введите имя'
+                'placeholder': 'Введите название'
             }
         )
     )

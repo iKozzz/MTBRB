@@ -16,7 +16,7 @@ RACE_STATUSES = (
 
 
 class Rider(models.Model):
-    number = models.CharField(max_length=3)
+    number = models.CharField(max_length=4)
     name = models.CharField(max_length=100)
     info = models.CharField(max_length=1000, blank=True)
     photo = models.ImageField(upload_to='rider_avatars', blank=True)
@@ -57,7 +57,8 @@ class Result(models.Model):
     race = models.ForeignKey(Race, on_delete=models.CASCADE)
     rider = models.ForeignKey(Rider, on_delete=models.CASCADE)
     stage = models.ForeignKey(Stage, on_delete=models.CASCADE)
-    status = models.CharField(max_length=3, blank=True)
-    points = models.IntegerField(blank=True)
+    status = models.CharField(max_length=3)
+    points = models.CharField(max_length=4, blank=True)
     start_time = models.TimeField(blank=True)
     finish_time = models.TimeField(blank=True)
+    result_time = models.CharField(max_length=20, blank=True)

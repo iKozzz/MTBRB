@@ -10,11 +10,13 @@
 </div>
 {% if data.stage %}
 <div class="row bg-light mt-3">
-    <div class="col-sm-6">
-        <h5 class="mx-auto">Ближайший этап:</h5>
+    <div class="col-sm-12">
+        <h5 class="text-center">Ближайший этап:</h5>
     </div>
-    <div class="col-sm-6">
-        <a class="btn btn-info" href="{% url 'em:stage_details' data.stage.id %}">{{ data.stage.name }}</a>
+    <div class="col-sm-12">
+        <div class="w-75 mx-auto my-2">
+            <a class="btn btn-warning w-100" href="{% url 'em:stage_details' data.stage.id %}">{{ data.stage.name }}</a>
+        </div>
     </div>
 </div>
 {% endif %}
@@ -24,6 +26,10 @@
     {% for rider in data.riders %}
     <div class="row border border-secondary bg-light my-2 mx-1 p-2">
         <div class="col-sm-12">
+            <h3 class="text-center mx-auto"><a class="w-100 mt-1 mb-3" href="{% url 'em:rider_details' rider.id %}">{{ rider.name }}</a></h3>
+            <h4 class="text-center mx-auto">- {{ rider.number }} -</h4>
+        </div>
+        <div class="col-sm-12">
             {% if rider.photo %}
                 <img class="img-fluid img-thumbnail" src="{{ rider.photo.url }}" alt="rider_avatar">
             {% else %}
@@ -31,19 +37,19 @@
                 <img class="img-fluid img-thumbnail" src="{% static 'rider_unknown.jpg' %}" alt="rider_avatar">
             {% endif %}
         </div>
-        <div class="col-sm-12">
-            <a class="w-100 btn btn-secondary mt-1 mb-3" href="{% url 'em:rider_details' rider.id %}">
-                <h3>[{{ rider.number }}] {{ rider.name }}</h3>
-            </a>
-        </div>
     {% if data.stage %}
         <div class="col-sm-12">
-            <div class="row">
-                <a class="btn btn-outline-dark w-100 mx-5" href="{% url 'em:rider_stage_assign' rider.id data.stage.id %}" role="button">
-                    <i class="fas fa-plus-square mr-2"></i>
-                    назначить на этап {{ data.stage.name }}
-                </a>
-            </div>
+            <a class="btn btn-outline-dark mx-auto w-100 mt-2" id="assign-rider-{{ rider.id }}" href="{% url 'em:rider_stage_assign' rider.id data.stage.id %}">
+                <i class="fas fa-plus-square mr-2"></i>назначить на этап
+            </a>
+            {% if data.riders_in_stage %}
+                {% for rider_in_stage in data.riders_in_stage %}
+                    {% if rider.id == rider_in_stage.id %}
+                        <label class="border border-success w-100 p-2 mt-2 text-center">участник этапа {{ data.stage.name }}</label>
+                        <script>document.getElementById('assign-rider-{{ rider.id }}').setAttribute('style', 'display:none');</script>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         </div>
     {%  endif%}
     </div>

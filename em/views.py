@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+import os
 
 from django.shortcuts import render, redirect
 from django.views import generic
@@ -19,12 +19,21 @@ class RidersView(generic.ListView):
     def get_queryset(self):
         riders = Rider.objects.order_by('id')[:]
         stage = None
+        riders_in_stage = []
         if Stage.objects.exists():
             if Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now()-timedelta(days=3)).exists():
                 stage = Stage.objects.order_by('date_start').filter(
                     date_start__gte=datetime.now()-timedelta(days=3)
                 )[:1].get()
-        return {'riders': riders, 'stage': stage}
+                riders_in_stage_table = RiderAndStage.objects.filter(stage=stage)
+                for rider_in_stage_table in riders_in_stage_table:
+                    rider = Rider.objects.get(id=rider_in_stage_table.rider.id)
+                    riders_in_stage.append({
+                        'number': rider.number,
+                        'id': rider.id,
+                        'name': rider.name
+                    })
+        return {'riders': riders, 'stage': stage, 'riders_in_stage': riders_in_stage}
 
 
 class RiderDetailsView(generic.DetailView):
@@ -42,8 +51,8 @@ class StagesView(generic.ListView):
 
 def stage_details(request, pk):
     stage = Stage.objects.get(id=pk)
-    riders_in_stage = RiderAndStage.objects.filter(stage=stage)
     races = Race.objects.filter(stage_id=pk)
+    riders_in_stage = RiderAndStage.objects.filter(stage=stage)
     riders = []
     for rider_in_stage in riders_in_stage:
         rider = Rider.objects.get(id=rider_in_stage.rider.id)
@@ -119,6 +128,8 @@ def rider_stage_unassign(request, rider_id, stage_id):
 
 def rider_delete(request, rider_id):
     rider = Rider.objects.get(id=rider_id)
+    if os.path.isfile(Rider.objects.get(id=rider.id).photo.path):
+        os.remove(Rider.objects.get(id=rider.id).photo.path)
     Rider.objects.get(id=rider.id).delete()
     return redirect('em:riders')
 
@@ -136,7 +147,7 @@ def race_delete(request, race_id, stage_id):
 
 
 def rider_prepare_to_race(request, rider_id, race_id, stage_id):
-    set_rider_ready(rider_id)
+    set_rider_ready(rider_id, race_id, stage_id)
     return redirect('em:race_details', race_id, stage_id)
 
 

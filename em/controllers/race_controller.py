@@ -11,7 +11,7 @@ FINISH_BUTTON_PIN_NUMBER = 15
 
 START_TIME = None
 RIDER_ID = None
-RACE_ID = None
+TRACK_ID = None
 STAGE_ID = None
 POINTS = 0
 
@@ -21,13 +21,13 @@ def get_current_timestamp(delta):
     return datetime.now() + timedelta(seconds=delta)
 
 
-def set_rider_ready(rider_id, race_id, stage_id, points):
+def set_rider_ready(rider_id, track_id, stage_id, points):
     global RIDER_ID
-    global RACE_ID
+    global TRACK_ID
     global STAGE_ID
     global POINTS
     RIDER_ID = rider_id
-    RACE_ID = race_id
+    TRACK_ID = track_id
     STAGE_ID = stage_id
     if points is not None:
         POINTS = points
@@ -60,10 +60,10 @@ def race_finish():
         finish_time = get_current_timestamp(uniform(1, 5))
         result = finish_time - START_TIME
         Result(
-            race=Race.objects.get(id=RACE_ID),
+            track=Track.objects.get(id=TRACK_ID),
             rider=Rider.objects.get(id=RIDER_ID),
             stage=Stage.objects.get(id=STAGE_ID),
-            status=RACE_STATUSES[0][1],
+            status='OK',
             points=POINTS,
             start_time=START_TIME,
             finish_time=finish_time,
@@ -73,6 +73,17 @@ def race_finish():
         RIDER_ID = None
         STAGE_ID = None
         POINTS = 0
+
+
+def set_rider_status(rider_id, track_id, stage_id, status):
+    global RIDER_ID
+    global STAGE_ID
+    Result(
+        rider=Rider.objects.get(id=rider_id),
+        track=Track.objects.get(id=track_id),
+        stage=Stage.objects.get(id=stage_id),
+        status=status,
+    ).save()
 
 
 # START_BUTTON.when_activated = race_start

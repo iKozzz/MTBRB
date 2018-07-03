@@ -1,24 +1,28 @@
 from django.db import models
 
 
-RACE_TYPE_CHOICES = (
+RACE_TYPES = (
     (True, 'время'),
     (False, 'баллы'),
 )
 
 RACE_STATUSES = (
-    (0, 'OK'),
-    (1, 'DNS'),
-    (2, 'DNF'),
-    (3, 'DSQ'),
-    (4, 'DRP'),
+    'DNS',
+    'DNF',
+    'DSQ',
+    'DRP',
+)
+
+TRACK_STATUSES = (
+    (True, 'OPEN'),
+    (False, 'CLOSED'),
 )
 
 
 class Rider(models.Model):
     number = models.CharField(max_length=4)
     name = models.CharField(max_length=100)
-    info = models.CharField(max_length=1000, blank=True)
+    info = models.CharField(max_length=1000, blank=True, null=True)
     photo = models.ImageField(upload_to='rider_avatars', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -37,10 +41,11 @@ class Stage(models.Model):
         return self.name
 
 
-class Race(models.Model):
+class Track(models.Model):
     stage_id = models.ForeignKey(Stage, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     info = models.CharField(max_length=1000, blank=True)
+    isOpened = models.BooleanField()
     isCountingTime = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -54,11 +59,12 @@ class RiderAndStage(models.Model):
 
 
 class Result(models.Model):
-    race = models.ForeignKey(Race, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    track = models.ForeignKey(Track, on_delete=models.CASCADE)
     rider = models.ForeignKey(Rider, on_delete=models.CASCADE)
     stage = models.ForeignKey(Stage, on_delete=models.CASCADE)
     status = models.CharField(max_length=3)
-    points = models.CharField(max_length=4, blank=True)
-    start_time = models.TimeField(blank=True)
-    finish_time = models.TimeField(blank=True)
+    points = models.CharField(max_length=4, null=True, blank=True)
+    start_time = models.TimeField(null=True, blank=True)
+    finish_time = models.TimeField(null=True, blank=True)
     result_time = models.CharField(max_length=20, blank=True)

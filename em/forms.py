@@ -47,8 +47,9 @@ class RiderAddForm(ModelForm):
         fields = ['number', 'name', 'info', 'photo']
 
 
-class RaceAddForm(ModelForm):
+class TrackAddForm(ModelForm):
     stage_id = IntegerField
+    isOpened = CharField
     name = CharField(
         widget=TextInput(
             attrs={
@@ -69,12 +70,12 @@ class RaceAddForm(ModelForm):
         required=False
     )
     isCountingTime = CharField(
-        widget=Select(choices=RACE_TYPE_CHOICES)
+        widget=Select(choices=RACE_TYPES)
     )
 
     class Meta:
-        model = Race
-        fields = ['stage_id', 'name', 'info', 'isCountingTime']
+        model = Track
+        fields = ['stage_id', 'isOpened', 'name', 'info', 'isCountingTime']
 
 
 class StageAddForm(ModelForm):

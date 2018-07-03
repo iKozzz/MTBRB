@@ -34,24 +34,24 @@
 
 <div class="row mx-1 mb-2 mt-3 border border-secondary rounded bg-warning">
     <div class="mx-auto">
-        <h3 class="mt-2">гонки</h3>
+        <h3 class="mt-2">трассы</h3>
     </div>
-    {% if races %}
-    <a class="w-100 btn btn-success mx-5 mb-3" role="button" href="{% url 'em:race_add' stage.id %}">
-        <i class="fas fa-plus-square"></i> Добавиь гонку
+    {% if tracks %}
+    <a class="w-100 btn btn-success mx-5 mb-3" role="button" href="{% url 'em:track_add' stage.id %}">
+        <i class="fas fa-plus-square"></i> Добавиь трассу
     </a>
-    {% for race in races %}
+    {% for track in tracks %}
      <div class="w-100 border border-secondary bg-light rounded my-2 mx-2">
         <div class="mx-3 my-2">
-            <h3 class="text-center"><a class="w-100 text-primary" href="{% url 'em:race_details' race.id stage.id %}">{{ race.name }}</a></h3>
+            <h3 class="text-center"><a class="w-100 text-primary" href="{% url 'em:track_details' track.id stage.id %}">{{ track.name }}</a></h3>
         </div>
     </div>
     {% endfor %}
     {% else %}
     <div class="w-100 mx-3 my-2">
-        <a class="w-100 btn btn-outline-dark bg-light text-uppercase text-primary" role="button" href="{% url 'em:race_add' stage.id%}">
+        <a class="w-100 btn btn-outline-dark bg-light text-uppercase text-primary" role="button" href="{% url 'em:track_add' stage.id%}">
             <i class="fas fa-info-circle"></i>
-                нужно добавить гонки
+                нужно добавить трассы
         </a>
     </div>
     {% endif %}

@@ -1,5 +1,6 @@
 import os
 
+from django.db.models import Sum
 from django.shortcuts import render, redirect
 from django.views import generic
 
@@ -51,7 +52,7 @@ class StagesView(generic.ListView):
 
 def stage_details(request, pk):
     stage = Stage.objects.get(id=pk)
-    races = Race.objects.filter(stage_id=pk)
+    tracks = Track.objects.filter(stage_id=pk)
     riders_in_stage = RiderAndStage.objects.filter(stage=stage)
     riders = []
     for rider_in_stage in riders_in_stage:
@@ -61,15 +62,15 @@ def stage_details(request, pk):
             'id': rider.id,
             'name': rider.name
         })
-    return render(request, 'stage_details.html', {'riders': riders, 'stage': stage, 'races': races})
+    return render(request, 'stage_details.html', {'riders': riders, 'stage': stage, 'tracks': tracks})
 
 
-def race_details(request, pk, stage_id):
-    race = None
+def track_details(request, pk, stage_id):
+    track = None
     stage = Stage.objects.get(id=stage_id)
     riders_in_stage = RiderAndStage.objects.filter(stage=stage)
-    if Race.objects.exists():
-        race = Race.objects.get(id=pk)
+    if Track.objects.exists():
+        track = Track.objects.get(id=pk)
     riders = []
     for rider_in_stage in riders_in_stage:
         rider = Rider.objects.get(id=rider_in_stage.rider.id)
@@ -77,9 +78,12 @@ def race_details(request, pk, stage_id):
             'number': rider.number,
             'id': rider.id,
             'name': rider.name,
-            'results': Result.objects.filter(stage_id=stage_id, race_id=race, rider_id=rider.id).values().order_by("result_time")
+            'results': Result.objects.filter(stage_id=stage_id, track_id=track, rider_id=rider.id).values().order_by('created_at'),
+            'best_time': Result.objects.exclude(result_time__exact='').filter(stage_id=stage_id, track_id=track, rider_id=rider.id).values().order_by('result_time').first(),
+            'total_score': Result.objects.filter(stage_id=stage_id, track_id=track, rider_id=rider.id).values('points').aggregate(Sum('points')),
+            'statuses': RACE_STATUSES,
         })
-    return render(request, 'race_details.html', {'riders': riders, 'stage': stage, 'race': race})
+    return render(request, 'track_details.html', {'riders': riders, 'stage': stage, 'track': track})
 
 
 class LiderboardView(generic.ListView):
@@ -140,22 +144,42 @@ def stage_delete(request, stage_id):
     return redirect('em:stages')
 
 
-def race_delete(request, race_id, stage_id):
-    race = Race.objects.get(id=race_id)
-    Race.objects.get(id=race.id).delete()
+def track_delete(request, track_id, stage_id):
+    Track.objects.get(id=track_id).delete()
     return redirect('em:stage_details', stage_id)
 
 
-def rider_prepare_to_race_with_time(request, rider_id, race_id, stage_id):
-    set_rider_ready(rider_id, race_id, stage_id, None)
-    return redirect('em:race_details', race_id, stage_id)
+def track_finalize(request, track_id, stage_id):
+    track = Track.objects.get(id=track_id)
+    track.isOpened = TRACK_STATUSES[1][0]
+    track.save()
+    return redirect('em:stage_details', stage_id)
 
 
-def rider_prepare_to_race_with_points(request, rider_id, race_id, stage_id):
-    points = int(request.POST.get('points'))
+def result_delete(request, result_id, track_id, stage_id):
+    Result.objects.get(id=result_id).delete()
+    return redirect('em:track_details', track_id, stage_id)
+
+
+def rider_prepare_to_go_with_time(request, rider_id, track_id, stage_id):
+    set_rider_ready(rider_id, track_id, stage_id, None)
+    return redirect('em:track_details', track_id, stage_id)
+
+
+def rider_prepare_to_go_with_points(request, rider_id, track_id, stage_id):
+    if request.POST.get('points'):
+        points = int(request.POST.get('points'))
+    else:
+        points = 0
     if points > 0:
-        set_rider_ready(rider_id, race_id, stage_id, points)
-    return redirect('em:race_details', race_id, stage_id)
+        set_rider_ready(rider_id, track_id, stage_id, points)
+    return redirect('em:track_details', track_id, stage_id)
+
+
+def rider_set_status(request, rider_id, track_id, stage_id):
+    if request.POST.get('status'):
+        set_rider_status(rider_id, track_id, stage_id, request.POST.get('status'))
+    return redirect('em:track_details', track_id, stage_id)
 
 
 def stage_add(request):
@@ -171,16 +195,16 @@ def stage_add(request):
     })
 
 
-def race_add(request, stage_id):
+def track_add(request, stage_id):
     stage = Stage.objects.get(id=stage_id)
     if request.method == 'POST':
-        form = RaceAddForm(request.POST)
+        form = TrackAddForm(request.POST)
         if form.is_valid():
             form.save()
             return redirect('em:stage_details', stage_id)
     else:
-        form = RaceAddForm()
-    return render(request, 'race_add_form.html', {
+        form = TrackAddForm()
+    return render(request, 'track_add_form.html', {
         'form': form,
         'stage': stage
     })

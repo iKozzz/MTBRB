@@ -6,7 +6,7 @@
     <div class="col-md-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Добавить гонку этапа: {{ stage.name }}</h3>
+                <h3 class="panel-title">Добавить трассу этапа: {{ stage.name }}</h3>
             </div>
             <div class="panel-body">
                 <form method="post" enctype="multipart/form-data">
@@ -14,8 +14,12 @@
 
                     <div class="form-group" style="display: none">
                         <label for="{{ form.stage_id.id_for_label }}">stage_id</label>
-                        {{ form.stage_id.errors }}
                         <input id="{{ form.stage_id.id_for_label }}" name="{{ form.stage_id.html_name }}" value="{{ stage.id }}">
+                    </div>
+
+                    <div class="form-group" style="display: none">
+                        <label for="{{ form.isOpened.id_for_label }}">isOpened</label>
+                        <input id="{{ form.isOpened.id_for_label }}" name="{{ form.isOpened.html_name }}" value="1">
                     </div>
 
                     <div class="form-group">
@@ -31,14 +35,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="{{ form.isCountingTime.id_for_label }}">Тип гонки</label>
+                        <label for="{{ form.isCountingTime.id_for_label }}">Тип</label>
                         {{ form.isCountingTime.errors }}
                         {{ form.isCountingTime }}
                     </div>
 
                     <div class="form-group mt-5">
                         <a class="btn btn-danger float-left text-uppercase" href="{% url 'em:stage_details' stage.id %}" role="button"><i class="fas fa-times-circle mr-2"></i> отмена</a>
-                        <button class="btn btn-success float-right text-uppercase" type="submit"><i class="fas fa-check-circle mr-2"></i>добавить гонку</button>
+                        <button class="btn btn-success float-right text-uppercase" type="submit"><i class="fas fa-check-circle mr-2"></i>добавить трассу</button>
                     </div>
                 </form>
             </div>

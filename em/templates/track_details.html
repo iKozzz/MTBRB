@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block body_block %}
+
+
+<div class="row">
+    <h3 class="text-center mx-auto mt-2">{{ track.name }}</h3>
+</div>
+<div class="row bg-light py-2">
+    {% if track.isOpened %}
+        <h6 class="col-sm-6 text-center"><label class="badge-success rounded px-2">Статус: активно</label></h6>
+        {% else %}
+        <h6 class="col-sm-6 text-center"><label class="badge-dark rounded px-2">Статус: закрыто</label></h6>
+    {% endif %}
+
+    <h5 class="col-sm-6 text-center">
+        <label class="badge-info rounded px-2">
+            Соревнование на {% if track.isCountingTime %}время{% else %}баллы{% endif %}
+        </label>
+    </h5>
+
+    {% if track.info %}
+    <div class="w-100 mx-2">
+        <div class="bg-light">
+            <p class="text-justify m-2">{{ track.info }}</p>
+        </div>
+    </div>
+    {%  endif %}
+</div>
+<div class="row my-3">
+    <a class="w-100 text-center text-primary" href="{% url 'em:stage_details' stage.id %}">
+        <i class="fas fa-arrow-left mr-2"></i>вернуться к этапу
+    </a>
+</div>
+
+{% if riders %}
+<div class="row mx-1 mb-3 mt-3 border border-secondary rounded bg-info">
+    <h5 class="text-center mx-auto mt-2">управление соревнованием</h5>
+    {% for rider in riders %}
+     <div class="w-100 border border-secondary rounded bg-light my-2 mx-2" id="rider-{{ rider.id }}">
+        <div class="mx-3 my-2">
+            <h3 class="text-center mx-auto"><a class="w-100" href="{%url 'em:rider_details' rider.id%}">{{ rider.name }}</a></h3>
+            <h4 class="text-center mx-auto">- {{ rider.number }} -</h4>
+        </div>
+
+         {% if rider.results %}
+             <ol type="1" class="text-primary">
+             {% for result in rider.results %}
+                 <li class="mr-4 mt-3 pt-1 pb-3 pr-2">
+                     <span class="col-sm-10" style="font-size: 1.3rem">
+                         {% if result.status != 'OK' %}
+                             <span class="bg-dark py-1 px-2 rounded text-white">{{ result.status }}</span>
+                         {% else %}
+                            {% if track.isCountingTime %}
+                                {% if rider.best_time.result_time == result.result_time %}
+                                    <span class="text-success">{{ result.result_time }}</span>
+                                {% else %}
+                                    <span class="text-secondary">{{ result.result_time }}</span>
+                                {% endif %}
+                            {% else %}
+                                <span class="text-secondary">{{ result.points }}</span>
+                            {% endif %}
+                         {% endif %}
+                     </span>
+
+                     {% if track.isOpened %}
+                     <button class="btn btn-outline-danger float-right" onclick="$('#result-delete-{{ result.id }}').toggle();">
+                         <i class="fas fa-ban"></i>
+                     </button>
+                     <a style="display: none" class="col-sm-12 btn btn-danger text-white mt-4 mb-2" id="result-delete-{{ result.id }}"
+                        href="{% url 'em:result_delete' result.id track.id stage.id %}"
+                     >удалить</a>
+                     {% endif %}
+                 </li>
+             {% endfor %}
+             </ol>
+
+             {% if not track.isCountingTime %}
+                 <div class="text-center">Всего баллов:
+                     <label class="ml-2 p-2 btn btn-secondary text-white">
+                     {% if rider.total_score.points__sum %}
+                         {{ rider.total_score.points__sum }}
+                     {% else %}
+                         0
+                     {% endif %}
+                     </label>
+                 </div>
+             {% endif %}
+         {% endif %}
+
+     {% if track.isOpened %}
+         <div class="row m-4">
+             <ul class="nav nav-pills mx-auto my-3">
+                 <li class="nav-item mr-3">
+                     <button id="li-actions-{{ rider.id }}" class="btn btn-info active" onclick="
+                             $('#actions-{{ rider.id }}').show();
+                             $(this).addClass('active');
+                             $(this).addClass('btn-info');
+                             $('#li-statuses-{{ rider.id }}').removeClass('active');
+                             $('#li-statuses-{{ rider.id }}').addClass('btn-outline-info');
+                             $('#statuses-{{ rider.id }}').hide();
+                             ">действия</button>
+                 </li>
+                 <li class="nav-item ml-3">
+                     <button id="li-statuses-{{ rider.id }}" class="btn btn-outline-info" onclick="
+                             $('#statuses-{{ rider.id }}').show();
+                             $(this).addClass('active');
+                             $(this).addClass('btn-info');
+                             $('#li-actions-{{ rider.id }}').removeClass('active');
+                             $('#li-actions-{{ rider.id }}').addClass('btn-outline-info');
+                             $('#actions-{{ rider.id }}').hide();
+                     ">статусы</button>
+                 </li>
+             </ul>
+
+            <div id="actions-{{ rider.id }}" class="w-100">
+                {% if track.isCountingTime %}
+                <a class="btn btn-secondary mb-2 col-sm-12" href="{%url 'em:rider_prepare_to_go_with_time' rider.id track.id stage.id%}">
+                    <i class="fas fa-flag mr-2"></i>приготовить к старту
+                </a>
+                {% else %}
+                     <form class="w-100 my-1 form-group" action="{%url 'em:rider_prepare_to_go_with_points' rider.id track.id stage.id%}" method="post">
+                     {% csrf_token %}
+                         <input class="form-control" placeholder="Назначить баллы" type="number" maxlength="4" name="points">
+                         <input class="form-control w-100 mt-3 btn btn-secondary" type="submit" value="назначить">
+                     </form>
+                {% endif %}
+            </div>
+
+            <div id="statuses-{{ rider.id }}" class="w-100" style="display: none">
+                <form class="w-100 my-1 form-group" action="{%url 'em:rider_set_status' rider.id track.id stage.id%}" method="post">
+                    {% csrf_token %}
+                    {% for status in rider.statuses %}
+                        <div class="form-check text-center">
+                            <label class="form-check-label mb-3">
+                                <input class="form-check-input" value="{{ status }}" type="radio" name="status">{{ status }}
+                            <label>
+                        </div>
+                    {% endfor %}
+                    <input class="form-control w-100 mt-3 btn btn-secondary" type="submit" value="назначить">
+                </form>
+            </div>
+         </div>
+     {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+    {% if track.isOpened %}
+        <div class="mx-5 mb-2 mt-5">
+            <div class="mx-5">
+                <button class="w-100 btn btn-outline-warning" onclick="$('#finalize-{{ track.id }}').toggle();">
+                    <i class="fas fa-ban mr-2"></i>завершить трек
+                </button>
+            </div>
+            <div class="mx-5 mt-5" id="finalize-{{ track.id }}" style="display: none">
+                <a class="w-100 btn btn-outline-warning" href="{% url 'em:track_finalize' track.id stage.id %}">
+                    подтвердить
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+<div class="mx-5 mb-2 mt-5">
+    <div class="mx-5">
+        <button class="w-100 btn btn-outline-danger" onclick="$('#kick-{{ track.id }}').toggle();">
+            <i class="fas fa-ban mr-2"></i>удалить трек
+        </button>
+    </div>
+    <div class="mx-5 mt-5" id="kick-{{ track.id }}" style="display: none">
+        <a class="w-100 btn btn-outline-danger" href="{% url 'em:track_delete' track.id stage.id %}">
+            подтвердить
+        </a>
+    </div>
+</div>
+
+{% endblock %}

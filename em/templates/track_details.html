@@ -36,6 +36,16 @@
 {% if riders %}
 <div class="row mx-1 mb-3 mt-3 border border-secondary rounded bg-info">
     <h5 class="text-center mx-auto mt-2">управление соревнованием</h5>
+    {% if riders %}
+        {% if track.isOpened %}
+        <div class="w-100 mx-2 my-3">
+            <a class="btn btn-warning mb-2 col-sm-12" href="{%url 'em:rider_cancel_ride' track.id stage.id%}">
+                <i class="fas fa-flag mr-2"></i>отменить текущий заезд
+            </a>
+        </div>
+        {% endif %}
+    {% endif %}
+
     {% for rider in riders %}
      <div class="w-100 border border-secondary rounded bg-light my-2 mx-2" id="rider-{{ rider.id }}">
         <div class="mx-3 my-2">
@@ -77,7 +87,7 @@
 
              {% if not track.isCountingTime %}
                  <div class="text-center">Всего баллов:
-                     <label class="ml-2 p-2 btn btn-secondary text-white">
+                     <label class="ml-2 p-2 bg-secondary rounded text-white">
                      {% if rider.total_score.points__sum %}
                          {{ rider.total_score.points__sum }}
                      {% else %}
@@ -115,11 +125,11 @@
 
             <div id="actions-{{ rider.id }}" class="w-100">
                 {% if track.isCountingTime %}
-                <a class="btn btn-secondary mb-2 col-sm-12" href="{%url 'em:rider_prepare_to_go_with_time' rider.id track.id stage.id%}">
+                <a class="btn btn-secondary mb-2 col-sm-12" href="{%url 'em:rider_prepare_to_ride_with_time' rider.id track.id stage.id%}">
                     <i class="fas fa-flag mr-2"></i>приготовить к старту
                 </a>
                 {% else %}
-                     <form class="w-100 my-1 form-group" action="{%url 'em:rider_prepare_to_go_with_points' rider.id track.id stage.id%}" method="post">
+                     <form class="w-100 my-1 form-group" action="{%url 'em:rider_prepare_to_ride_with_points' rider.id track.id stage.id%}" method="post">
                      {% csrf_token %}
                          <input class="form-control" placeholder="Назначить баллы" type="number" maxlength="4" name="points">
                          <input class="form-control w-100 mt-3 btn btn-secondary" type="submit" value="назначить">

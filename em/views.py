@@ -161,12 +161,17 @@ def result_delete(request, result_id, track_id, stage_id):
     return redirect('em:track_details', track_id, stage_id)
 
 
-def rider_prepare_to_go_with_time(request, rider_id, track_id, stage_id):
+def rider_cancel_ride(request, track_id, stage_id):
+    ride_cancel()
+    return redirect('em:track_details', track_id, stage_id)
+
+
+def rider_prepare_to_ride_with_time(request, rider_id, track_id, stage_id):
     set_rider_ready(rider_id, track_id, stage_id, None)
     return redirect('em:track_details', track_id, stage_id)
 
 
-def rider_prepare_to_go_with_points(request, rider_id, track_id, stage_id):
+def rider_prepare_to_ride_with_points(request, rider_id, track_id, stage_id):
     if request.POST.get('points'):
         points = int(request.POST.get('points'))
     else:

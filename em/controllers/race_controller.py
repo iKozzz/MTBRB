@@ -32,11 +32,11 @@ def set_rider_ready(rider_id, track_id, stage_id, points):
     if points is not None:
         POINTS = points
     # for debug
-    race_start()
-    race_finish()
+    ride_start()
+    ride_finish()
 
 
-def race_cancel():
+def ride_cancel():
     global START_TIME
     global RIDER_ID
     global STAGE_ID
@@ -45,18 +45,19 @@ def race_cancel():
     STAGE_ID = None
 
 
-def race_start():
+def ride_start():
     global START_TIME
+    # check start time to prevent issues with start button
     if RIDER_ID is not None and START_TIME is None:
         START_TIME = get_current_timestamp(0)
 
 
-def race_finish():
+def ride_finish():
     global START_TIME
     global RIDER_ID
     global STAGE_ID
     global POINTS
-    if RIDER_ID is not None and START_TIME is not None:
+    if RIDER_ID is not None:
         finish_time = get_current_timestamp(uniform(1, 5))
         result = finish_time - START_TIME
         Result(

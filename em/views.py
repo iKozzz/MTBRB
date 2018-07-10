@@ -1,6 +1,6 @@
 import os
 
-from django.db.models import Sum
+from django.db.models import Sum, Q, Min
 from django.shortcuts import render, redirect
 from django.views import generic
 
@@ -78,12 +78,45 @@ def track_details(request, pk, stage_id):
             'number': rider.number,
             'id': rider.id,
             'name': rider.name,
-            'results': Result.objects.filter(stage_id=stage_id, track_id=track, rider_id=rider.id).values().order_by('created_at'),
-            'best_time': Result.objects.exclude(result_time__exact='').filter(stage_id=stage_id, track_id=track, rider_id=rider.id).values().order_by('result_time').first(),
-            'total_score': Result.objects.filter(stage_id=stage_id, track_id=track, rider_id=rider.id).values('points').aggregate(Sum('points')),
+            'results': Result.objects.filter(
+                    stage_id=stage_id,
+                    track_id=track,
+                    rider_id=rider.id,
+                ).values().order_by('created_at'),
+            'best_time': Result.objects.exclude(status__in=('DNF', 'DNS',)).filter(
+                    stage_id=stage_id,
+                    track_id=track,
+                    rider_id=rider.id,
+                ).values().order_by('result_time').first(),
+            'total_score': Result.objects.filter(
+                    stage_id=stage_id,
+                    track_id=track,
+                    rider_id=rider.id,
+                ).values('points').aggregate(Sum('points')),
             'statuses': RACE_STATUSES,
         })
-    return render(request, 'track_details.html', {'riders': riders, 'stage': stage, 'track': track})
+    # leaders
+    losers = Result.objects.filter(
+        Q(stage_id=stage_id) and Q(track_id=track) and Q(status__in=('DSQ', 'DRP'))
+    ).values('rider_id')
+    leaders = []
+    raw_leaders = Result.objects.exclude(
+        rider__in=losers
+    ).values('rider').annotate(time=Min('result_time')).order_by('time')
+    for leader in raw_leaders:
+        rider = Rider.objects.get(id=leader['rider'])
+        leaders.append({
+            'number': rider.number,
+            'id': rider.id,
+            'name': rider.name,
+            'time': leader['time'],
+        })
+    return render(request, 'track_details.html', {
+        'riders': riders,
+        'stage': stage,
+        'track': track,
+        'leaders': leaders,
+    })
 
 
 class LiderboardView(generic.ListView):

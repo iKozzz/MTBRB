@@ -67,4 +67,4 @@ class Result(models.Model):
     points = models.CharField(max_length=4, null=True, blank=True)
     start_time = models.TimeField(null=True, blank=True)
     finish_time = models.TimeField(null=True, blank=True)
-    result_time = models.CharField(max_length=20, blank=True)
+    result_time = models.CharField(max_length=20, null=True, blank=True)

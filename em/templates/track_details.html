@@ -34,16 +34,31 @@
 </div>
 
 {% if riders %}
+
+{% if leaders %}
+    <div class="row mx-1 mb-3 mt-3 border border-secondary rounded bg-light">
+    <h5 class="mx-auto">лидеры</h5>
+        <ul class="list-group w-100 text-justify">
+            {%  for leader in leaders %}
+                <li class="list-group-item">
+                    <span class="py-1 px-2 bg-light rounded">[{{ leader.time }}]</span> - {{ leader.number }} - {{ leader.name }}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
 <div class="row mx-1 mb-3 mt-3 border border-secondary rounded bg-info">
     <h5 class="text-center mx-auto mt-2">управление соревнованием</h5>
-    {% if riders %}
-        {% if track.isOpened %}
-        <div class="w-100 mx-2 my-3">
-            <a class="btn btn-warning mb-2 col-sm-12" href="{%url 'em:rider_cancel_ride' track.id stage.id%}">
-                <i class="fas fa-flag mr-2"></i>отменить текущий заезд
-            </a>
-        </div>
-        {% endif %}
+
+    {% if track.isOpened %}
+
+    <div class="w-100 mx-2 my-3">
+        <a class="btn btn-warning mb-2 col-sm-12" href="{%url 'em:rider_cancel_ride' track.id stage.id%}">
+            <i class="fas fa-flag mr-2"></i>отменить текущий заезд
+        </a>
+    </div>
+
     {% endif %}
 
     {% for rider in riders %}

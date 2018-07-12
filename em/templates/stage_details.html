@@ -6,7 +6,7 @@
 <div class="row">
     <div class="mx-auto">
         <h4 class="text-center my-2 mx-auto">этап</h4>
-        <h3 class="text-center my-2 mx-auto">{{ stage.name }}</h3>
+        <h2 class="text-center my-2 mx-auto">{{ stage.name }}</h2>
     </div>
 </div>
 <div class="row">
@@ -32,19 +32,64 @@
     </a>
 </div>
 
-<div class="row mx-1 mb-2 mt-3 border border-secondary rounded bg-warning">
+<div class="row mx-1 mb-2 mt-3 border border-dark rounded bg-secondary">
     <div class="mx-auto">
-        <h3 class="mt-2">трассы</h3>
+        <h3 class="mt-2 text-white">трассы этапа</h3>
     </div>
+
     {% if tracks %}
     <a class="w-100 btn btn-success mx-5 mb-3" role="button" href="{% url 'em:track_add' stage.id %}">
-        <i class="fas fa-plus-square"></i> Добавиь трассу
+        <i class="fas fa-plus-square"></i> Добавиь трассу этапа
     </a>
     {% for track in tracks %}
-     <div class="w-100 border border-secondary bg-light rounded my-2 mx-2">
+     <div class="w-100 border border-secondary bg-light rounded my-3 mx-3">
         <div class="mx-3 my-2">
             <h3 class="text-center"><a class="w-100 text-primary" href="{% url 'em:track_details' track.id stage.id %}">{{ track.name }}</a></h3>
+            <h6 class="text-center">
+                <label class="border bg-white rounded text-secondary px-3 py-2">
+                    <i class="far fa-eye mr-2"></i>
+                    {% if track.isOpened %}
+                        <span class="text-success">активно</span>
+                    {% else %}
+                        <span class="text-danger">закрыто</span>
+                    {% endif %}
+                </label>
+            </h6>
         </div>
+
+         {% if track.leaders %}
+            <div class="row mx-1 mb-3 mt-3">
+            <h6 class="mx-auto text-secondary">лидеры</h6>
+                <ul class="list-group w-100 text-justify">
+                    {%  for leader in track.leaders %}
+                        <li class="list-group-item">
+                            {% if leader.time %}
+                                <span class="float-left">
+                                    <i class="fas fa-bicycle mr-1 text-info"></i>
+                                    <label class="f-sm">{{ leader.number }}</label>
+                                </span>
+                                <span class="float-right">
+                                    <i class="fas fa-stopwatch mr-1 text-info"></i>
+                                    <label class="f-sm">{{ leader.time }}</label>
+                                </span>
+                            {% else %}
+                                {% if leader.points > 0 %}
+                                   <span class="float-left">
+                                    <i class="fas fa-bicycle mr-1 text-info"></i>
+                                    <label class="f-sm">{{ leader.number }}</label>
+                                </span>
+                                <span class="float-right">
+                                    <i class="fas fa-star mr-1 text-info"></i>
+                                    <label class="f-sm">{{ leader.points }}</label>
+                                </span>
+                                {% endif %}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+         {% endif %}
+
     </div>
     {% endfor %}
     {% else %}
@@ -57,29 +102,29 @@
     {% endif %}
 </div>
 
-<div class="row mx-1 mb-3 mt-5 border border-secondary rounded bg-info">
+<div class="row mx-1 mb-3 mt-5 border border-dark rounded bg-secondary">
     <div class="mx-auto">
-        <h3 class="mt-2">райдеры</h3>
+        <h3 class="mt-2 text-white">райдеры этапа</h3>
     </div>
     {% if riders %}
     <a class="w-100 btn btn-success mx-5 mb-3" role="button" href="{% url 'em:riders' %}">
-        <i class="fas fa-plus-square"></i> Добавиь райдера
+        <i class="fas fa-plus-square"></i> Добавиь райдера на этап
     </a>
     {% for rider in riders %}
-     <div class="w-100 border border-secondary rounded bg-light my-2 mx-2">
+     <div class="w-100 border border-secondary rounded bg-light my-3 mx-3">
         <div class="mx-3 my-2">
             <h5 class="text-center">- {{ rider.number }} -</h5>
             <h3 class="text-center"><a class="w-100" href="{% url 'em:rider_details' rider.id %}">{{ rider.name }}</a></h3>
         </div>
 
-        <div class="mx-5 mb-2 mt-4">
+        <div class="mx-5 mb-4 mt-4">
             <div class="mx-3">
-                <button class="w-100 btn btn-outline-dark" onclick="$('#kick-{{ rider.id }}').toggle();">
-                    Убрать райдера из этапа?
+                <button class="w-100 btn btn-dark" onclick="$('#kick-{{ rider.id }}').toggle();">
+                    Убрать из этапа?
                 </button>
             </div>
             <div class="mx-5 mt-5" id="kick-{{ rider.id }}" style="display: none">
-                <a class="w-100 btn btn-outline-danger" href="{% url 'em:rider_stage_unassign' rider.id stage.id %}">
+                <a class="w-100 btn btn-danger" href="{% url 'em:rider_stage_unassign' rider.id stage.id %}">
                     подтвердить
                 </a>
             </div>

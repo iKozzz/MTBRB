@@ -8,13 +8,13 @@
 </div>
 <div class="row bg-light py-2">
     {% if track.isOpened %}
-        <h6 class="col-sm-6 text-center"><label class="badge-success rounded px-2">Статус: активно</label></h6>
+        <h6 class="col-sm-6 mt-3 text-center"><label class="badge-success rounded px-3 py-2">Статус: активно</label></h6>
         {% else %}
-        <h6 class="col-sm-6 text-center"><label class="badge-dark rounded px-2">Статус: закрыто</label></h6>
+        <h6 class="col-sm-6 mt-3 text-center"><label class="badge-dark rounded px-3 py-2">Статус: закрыто</label></h6>
     {% endif %}
 
     <h5 class="col-sm-6 text-center">
-        <label class="badge-info rounded px-2">
+        <label class="badge-info rounded px-3 py-2">
             Соревнование на {% if track.isCountingTime %}время{% else %}баллы{% endif %}
         </label>
     </h5>
@@ -36,33 +36,53 @@
 {% if riders %}
 
 {% if leaders %}
-    <div class="row mx-1 mb-3 mt-3 border border-secondary rounded bg-light">
-    <h5 class="mx-auto">лидеры</h5>
+    <div class="row mx-1 mb-4 mt-3 border border-secondary rounded bg-secondary">
+    <h5 class="mx-auto text-white">лидеры</h5>
         <ul class="list-group w-100 text-justify">
             {%  for leader in leaders %}
                 <li class="list-group-item">
-                    <span class="py-1 px-2 bg-light rounded">[{{ leader.time }}]</span> - {{ leader.number }} - {{ leader.name }}
+                    {% if leader.time %}
+                        <span class="float-left">
+                            <i class="fas fa-bicycle mr-2 text-info"></i>
+                            <label class="f-n">{{ leader.number }}</label>
+                        </span>
+                        <span class="float-right">
+                            <i class="fas fa-stopwatch mr-2 text-info"></i>
+                            <label class="f-n">{{ leader.time }}</label>
+                        </span>
+                    {% else %}
+                        {% if leader.points > 0 %}
+                           <span class="float-left">
+                            <i class="fas fa-bicycle mr-2 text-info"></i>
+                            <label class="f-n">{{ leader.number }}</label>
+                        </span>
+                        <span class="float-right">
+                            <i class="fas fa-star mr-2 text-info"></i>
+                            <label class="f-n">{{ leader.points }}</label>
+                        </span>
+                        {% endif %}
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
     </div>
 {% endif %}
 
-<div class="row mx-1 mb-3 mt-3 border border-secondary rounded bg-info">
-    <h5 class="text-center mx-auto mt-2">управление соревнованием</h5>
+<div class="row mx-1 mb-3 mt-3 border border-secondary rounded bg-secondary">
+    <h5 class="text-white mx-auto mt-2">управление соревнованием</h5>
 
     {% if track.isOpened %}
 
-    <div class="w-100 mx-2 my-3">
+    <div class="w-100 mx-5 my-3">
         <a class="btn btn-warning mb-2 col-sm-12" href="{%url 'em:rider_cancel_ride' track.id stage.id%}">
-            <i class="fas fa-flag mr-2"></i>отменить текущий заезд
+            <i class="fas fa-flag-checkered mr-2"></i>отменить текущий заезд
         </a>
     </div>
 
     {% endif %}
 
     {% for rider in riders %}
-     <div class="w-100 border border-secondary rounded bg-light my-2 mx-2" id="rider-{{ rider.id }}">
+     <div class="w-100 border border-secondary rounded bg-light my-3 mx-3" id="rider-{{ rider.id }}">
         <div class="mx-3 my-2">
             <h3 class="text-center mx-auto"><a class="w-100" href="{%url 'em:rider_details' rider.id%}">{{ rider.name }}</a></h3>
             <h4 class="text-center mx-auto">- {{ rider.number }} -</h4>
@@ -140,14 +160,14 @@
 
             <div id="actions-{{ rider.id }}" class="w-100">
                 {% if track.isCountingTime %}
-                <a class="btn btn-secondary mb-2 col-sm-12" href="{%url 'em:rider_prepare_to_ride_with_time' rider.id track.id stage.id%}">
+                <a class="btn btn-success mb-2 col-sm-12" href="{%url 'em:rider_prepare_to_ride_with_time' rider.id track.id stage.id%}">
                     <i class="fas fa-flag mr-2"></i>приготовить к старту
                 </a>
                 {% else %}
                      <form class="w-100 my-1 form-group" action="{%url 'em:rider_prepare_to_ride_with_points' rider.id track.id stage.id%}" method="post">
                      {% csrf_token %}
                          <input class="form-control" placeholder="Назначить баллы" type="number" maxlength="4" name="points">
-                         <input class="form-control w-100 mt-3 btn btn-secondary" type="submit" value="назначить">
+                         <input class="form-control w-100 mt-3 btn btn-success" type="submit" value="назначить">
                      </form>
                 {% endif %}
             </div>
@@ -162,7 +182,7 @@
                             </label>
                         </div>
                     {% endfor %}
-                    <input class="form-control w-100 mt-3 btn btn-secondary" type="submit" value="назначить">
+                    <input class="form-control w-100 mt-3 btn btn-success" type="submit" value="назначить">
                 </form>
             </div>
          </div>

@@ -1,6 +1,6 @@
 import os
 
-from django.db.models import Sum, Q, Min
+from django.db.models import Sum, Min
 from django.shortcuts import render, redirect
 from django.views import generic
 
@@ -62,6 +62,8 @@ def stage_details(request, pk):
             'id': rider.id,
             'name': rider.name
         })
+    for track in tracks:
+        track.leaders = get_leaders(stage.id, track)
     return render(request, 'stage_details.html', {'riders': riders, 'stage': stage, 'tracks': tracks})
 
 
@@ -95,28 +97,53 @@ def track_details(request, pk, stage_id):
                 ).values('points').aggregate(Sum('points')),
             'statuses': RACE_STATUSES,
         })
-    # leaders
-    losers = Result.objects.filter(
-        Q(stage_id=stage_id) and Q(track_id=track) and Q(status__in=('DSQ', 'DRP'))
-    ).values('rider_id')
-    leaders = []
-    raw_leaders = Result.objects.exclude(
-        rider__in=losers
-    ).values('rider').annotate(time=Min('result_time')).order_by('time')
-    for leader in raw_leaders:
-        rider = Rider.objects.get(id=leader['rider'])
-        leaders.append({
-            'number': rider.number,
-            'id': rider.id,
-            'name': rider.name,
-            'time': leader['time'],
-        })
+    leaders = get_leaders(stage_id, track)
     return render(request, 'track_details.html', {
         'riders': riders,
         'stage': stage,
         'track': track,
         'leaders': leaders,
     })
+
+
+def get_leaders(stage_id, track):
+    leaders = []
+    losers = Result.objects.filter(
+        stage_id=stage_id,
+        track_id=track.id,
+        status__in=('DSQ', 'DRP')
+    ).values('rider_id')
+    if track.isCountingTime:
+        raw_leaders = Result.objects.exclude(
+            rider__in=losers
+        ).filter(
+            stage_id=stage_id,
+            track_id=track.id,
+        ).values('rider').annotate(time=Min('result_time')).order_by('time')[:3]
+        for leader in raw_leaders:
+            rider = Rider.objects.get(id=leader['rider'])
+            leaders.append({
+                'number': rider.number,
+                'id': rider.id,
+                'name': rider.name,
+                'time': leader['time'],
+            })
+    else:
+        raw_leaders = Result.objects.exclude(
+            rider__in=losers
+        ).filter(
+            stage_id=stage_id,
+            track_id=track.id,
+        ).values('rider').annotate(points=Sum('points')).order_by('-points')[:3]
+        for leader in raw_leaders:
+            rider = Rider.objects.get(id=leader['rider'])
+            leaders.append({
+                'number': rider.number,
+                'id': rider.id,
+                'name': rider.name,
+                'points': leader['points'],
+            })
+    return leaders
 
 
 class LiderboardView(generic.ListView):

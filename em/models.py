@@ -68,3 +68,10 @@ class Result(models.Model):
     start_time = models.TimeField(null=True, blank=True)
     finish_time = models.TimeField(null=True, blank=True)
     result_time = models.CharField(max_length=20, null=True, blank=True)
+
+
+class Leaderboard(models.Model):
+    stage_id = models.IntegerField()
+    track_id = models.IntegerField()
+    rider_id = models.IntegerField()
+    finished = models.IntegerField()

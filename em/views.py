@@ -1,6 +1,6 @@
 import os
 
-from django.db.models import Sum, Min
+from django.db.models import Sum, Min, Max, Count
 from django.shortcuts import render, redirect
 from django.views import generic
 
@@ -50,6 +50,29 @@ class StagesView(generic.ListView):
         return Stage.objects.order_by('date_start')[:]
 
 
+class LiderboardView(generic.ListView):
+    template_name = 'liderboard.html'
+    context_object_name = 'data'
+
+    def get_queryset(self):
+        riders = Rider.objects.order_by('id')[:]
+        stage = None
+        results = None
+        stage_leaders = None
+        if Stage.objects.exists():
+            if Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now() - timedelta(days=3)).exists():
+                stage = Stage.objects.order_by('date_start').filter(
+                    date_start__gte=datetime.now() - timedelta(days=3)
+                )[:1].get()
+                stage_leaders = get_leaders_for_stage(stage)
+        return {
+            'riders': riders,
+            'stage': stage,
+            'results': results,
+            'stage_leaders': stage_leaders,
+        }
+
+
 def stage_details(request, pk):
     stage = Stage.objects.get(id=pk)
     tracks = Track.objects.filter(stage_id=pk)
@@ -63,7 +86,7 @@ def stage_details(request, pk):
             'name': rider.name
         })
     for track in tracks:
-        track.leaders = get_leaders(stage.id, track)
+        track.leaders = get_leaders_for_track(stage.id, track)
     return render(request, 'stage_details.html', {'riders': riders, 'stage': stage, 'tracks': tracks})
 
 
@@ -97,7 +120,7 @@ def track_details(request, pk, stage_id):
                 ).values('points').aggregate(Sum('points')),
             'statuses': RACE_STATUSES,
         })
-    leaders = get_leaders(stage_id, track)
+    leaders = get_leaders_for_track(stage_id, track)
     return render(request, 'track_details.html', {
         'riders': riders,
         'stage': stage,
@@ -106,7 +129,7 @@ def track_details(request, pk, stage_id):
     })
 
 
-def get_leaders(stage_id, track):
+def get_leaders_for_track(stage_id, track):
     leaders = []
     losers = Result.objects.filter(
         stage_id=stage_id,
@@ -123,6 +146,7 @@ def get_leaders(stage_id, track):
         for leader in raw_leaders:
             rider = Rider.objects.get(id=leader['rider'])
             leaders.append({
+                'track': track.id,
                 'number': rider.number,
                 'id': rider.id,
                 'name': rider.name,
@@ -138,6 +162,7 @@ def get_leaders(stage_id, track):
         for leader in raw_leaders:
             rider = Rider.objects.get(id=leader['rider'])
             leaders.append({
+                'track': track.id,
                 'number': rider.number,
                 'id': rider.id,
                 'name': rider.name,
@@ -146,20 +171,51 @@ def get_leaders(stage_id, track):
     return leaders
 
 
-class LiderboardView(generic.ListView):
-    template_name = 'liderboard.html'
-    context_object_name = 'data'
-
-    def get_queryset(self):
-        riders = Rider.objects.order_by('id')[:]
-        stage = None
-        results = None
-        if Stage.objects.exists():
-            if Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now() - timedelta(days=3)).exists():
-                stage = Stage.objects.order_by('date_start').filter(
-                    date_start__gte=datetime.now() - timedelta(days=3)
-                )[:1].get()
-        return {'riders': riders, 'stage': stage, 'results': results}
+def get_leaders_for_stage(stage):
+    Leaderboard.objects.all().delete()
+    tracks = Track.objects.filter(stage_id=stage.id)
+    for track in tracks:
+        track_leaders = get_leaders_for_track(stage.id, track)
+        Leaderboard(
+            stage_id=stage.id,
+            track_id=track_leaders[0]['track'],
+            rider_id=track_leaders[0]['id'],
+            finished=1,
+        ).save()
+        Leaderboard(
+            stage_id=stage.id,
+            track_id=track_leaders[1]['track'],
+            rider_id=track_leaders[1]['id'],
+            finished=2,
+        ).save()
+        Leaderboard(
+            stage_id=stage.id,
+            track_id=track_leaders[2]['track'],
+            rider_id=track_leaders[2]['id'],
+            finished=3,
+        ).save()
+    # get stage leaders
+    leaders = [{
+        '1st': Leaderboard.objects.filter(
+             rider_id__in=(Leaderboard.objects.filter(
+                 stage_id=stage.id,
+                 finished=1,
+             ).values('rider_id').distinct())
+        ).values('rider_id').annotate(rider=Max(Count('rider_id'))).values('rider'),
+        '2nd': Leaderboard.objects.filter(
+            rider_id__in=(Leaderboard.objects.filter(
+                stage_id=stage.id,
+                finished=2,
+            ).values('rider_id').distinct())
+        ).values('rider_id').annotate(rider=Max(Count('rider_id'))).values('rider'),
+        '3rd': Leaderboard.objects.filter(
+            rider_id__in=(Leaderboard.objects.filter(
+                stage_id=stage.id,
+                finished=3,
+            ).values('rider_id').distinct())
+        ).values('rider_id').annotate(rider=Max(Count('rider_id'))).values('rider'),
+    }]
+    return leaders
 
 
 def rider_add(request):

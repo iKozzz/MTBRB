@@ -44,7 +44,9 @@
                     {% if leader.time %}
                         <span class="float-left">
                             <i class="fas fa-bicycle mr-2 text-info"></i>
-                            <label class="f-n">{{ leader.number }}</label>
+                            <label class="f-n">
+                                <a href="#rider-{{ leader.id }}">{{ leader.number }}</a>
+                            </label>
                         </span>
                         <span class="float-right">
                             <i class="fas fa-stopwatch mr-2 text-info"></i>
@@ -208,6 +210,15 @@
     {% endif %}
 
 <div class="mx-5 mb-2 mt-5">
+    <div class="mx-5">
+        <h6 class="text-center">* статусы:</h6>
+        <ul>
+            <li><span>DNS</span> - не стартовал</li>
+            <li><span>DNF</span> - не финишировал</li>
+            <li><span>DSQ</span> - дисквалификация</li>
+            <li><span>DRP</span> - выбыл</li>
+        </ul>
+    </div>
     <div class="mx-5">
         <button class="w-100 btn btn-outline-danger" onclick="$('#kick-{{ track.id }}').toggle();">
             <i class="fas fa-ban mr-2"></i>удалить трек

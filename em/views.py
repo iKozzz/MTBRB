@@ -1,6 +1,7 @@
+import operator
 import os
 
-from django.db.models import Sum, Min, Max, Count
+from django.db.models import Sum, Min
 from django.shortcuts import render, redirect
 from django.views import generic
 
@@ -176,46 +177,49 @@ def get_leaders_for_stage(stage):
     tracks = Track.objects.filter(stage_id=stage.id)
     for track in tracks:
         track_leaders = get_leaders_for_track(stage.id, track)
-        Leaderboard(
-            stage_id=stage.id,
-            track_id=track_leaders[0]['track'],
-            rider_id=track_leaders[0]['id'],
-            finished=1,
-        ).save()
-        Leaderboard(
-            stage_id=stage.id,
-            track_id=track_leaders[1]['track'],
-            rider_id=track_leaders[1]['id'],
-            finished=2,
-        ).save()
-        Leaderboard(
-            stage_id=stage.id,
-            track_id=track_leaders[2]['track'],
-            rider_id=track_leaders[2]['id'],
-            finished=3,
-        ).save()
+        if track_leaders.__len__() > 0:
+            Leaderboard(
+                stage_id=stage.id,
+                track_id=track_leaders[0]['track'],
+                rider_id=track_leaders[0]['id'],
+                finished=1,
+            ).save()
+            Leaderboard(
+                stage_id=stage.id,
+                track_id=track_leaders[1]['track'],
+                rider_id=track_leaders[1]['id'],
+                finished=2,
+            ).save()
+            Leaderboard(
+                stage_id=stage.id,
+                track_id=track_leaders[2]['track'],
+                rider_id=track_leaders[2]['id'],
+                finished=3,
+            ).save()
     # get stage leaders
     leaders = [{
-        '1st': Leaderboard.objects.filter(
-             rider_id__in=(Leaderboard.objects.filter(
-                 stage_id=stage.id,
-                 finished=1,
-             ).values('rider_id').distinct())
-        ).values('rider_id').annotate(rider=Max(Count('rider_id'))).values('rider'),
-        '2nd': Leaderboard.objects.filter(
-            rider_id__in=(Leaderboard.objects.filter(
-                stage_id=stage.id,
-                finished=2,
-            ).values('rider_id').distinct())
-        ).values('rider_id').annotate(rider=Max(Count('rider_id'))).values('rider'),
-        '3rd': Leaderboard.objects.filter(
-            rider_id__in=(Leaderboard.objects.filter(
-                stage_id=stage.id,
-                finished=3,
-            ).values('rider_id').distinct())
-        ).values('rider_id').annotate(rider=Max(Count('rider_id'))).values('rider'),
+        'first': choose_best_rider_for_place(1, stage),
+        'second': choose_best_rider_for_place(2, stage),
+        'third': choose_best_rider_for_place(3, stage),
     }]
     return leaders
+
+
+def choose_best_rider_for_place(place, stage):
+    first_portion = Leaderboard.objects.filter(
+            stage_id=stage.id,
+            finished=place,
+        ).values('rider_id').distinct()
+    counters = {}
+    for rider in first_portion:
+        counters.update({
+            rider['rider_id']: Leaderboard.objects.filter(
+                stage_id=stage.id,
+                rider_id=rider['rider_id'],
+            ).values('rider_id').count()
+        })
+    selective = [max(counters.items(), key=operator.itemgetter(1))[1]]
+    return selective
 
 
 def rider_add(request):

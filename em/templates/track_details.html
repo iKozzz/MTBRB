@@ -210,16 +210,16 @@
     {% endif %}
 
 <div class="mx-5 mb-2 mt-5">
-    <div class="mx-5">
-        <h6 class="text-center">* статусы:</h6>
-        <ul>
-            <li><span>DNS</span> - не стартовал</li>
-            <li><span>DNF</span> - не финишировал</li>
-            <li><span>DSQ</span> - дисквалификация</li>
-            <li><span>DRP</span> - выбыл</li>
+    <div class="mx-auto">
+        <h6 class="text-center"><span class="bg-info text-white rounded py-1 px-2">* статусы:</span></h6>
+        <ul class="list-group">
+            <li class="list-group-item my-2"><span class="text-white bg-dark py-1 px-2 rounded">DNS</span> - не стартовал</li>
+            <li class="list-group-item my-2"><span class="text-white bg-dark py-1 px-2 rounded">DNF</span> - не финишировал</li>
+            <li class="list-group-item my-2"><span class="text-white bg-dark py-1 px-2 rounded">DSQ</span> - дисквалификация</li>
+            <li class="list-group-item my-2"><span class="text-white bg-dark py-1 px-2 rounded">DRP</span> - выбыл</li>
         </ul>
     </div>
-    <div class="mx-5">
+    <div class="mx-5 mt-5">
         <button class="w-100 btn btn-outline-danger" onclick="$('#kick-{{ track.id }}').toggle();">
             <i class="fas fa-ban mr-2"></i>удалить трек
         </button>

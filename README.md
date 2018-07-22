@@ -1,5 +1,5 @@
 ## MTBRB
-сделано с любовью вместе с [Django](https://www.djangoproject.com)
+Python 3 + [Django](https://www.djangoproject.com)
 ---
 
 

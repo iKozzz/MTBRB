@@ -1,6 +1,8 @@
 #!/bin/bash
 echo "=== INSTALLING LIBS ==="
-bash -c "sudo pip install django pillow gpiozero"
+bash -c "sudo pip install django pillow"
+bash -c "sudo apt update"
+bash -c "sudo apt install -y python3-gpiozero"
 echo "=== CLEANING DIRECTORY ==="
 bash -c "sudo rm -rf media/ db.sqlite3 em/migrations/0*"
 echo "=== DONE CLEANING DIRECTORY ==="

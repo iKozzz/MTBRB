@@ -79,8 +79,7 @@ def ride_finish():
 
 
 def set_rider_status(rider_id, track_id, stage_id, status):
-    global RIDER_ID
-    global STAGE_ID
+    ride_cancel()
     Result(
         rider=Rider.objects.get(id=rider_id),
         track=Track.objects.get(id=track_id),

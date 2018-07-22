@@ -1,13 +1,15 @@
-# from gpiozero import Button
 from datetime import datetime, timedelta
 from random import uniform
 
+from gpiozero import Button
+
 from em.models import *
+
 START_BUTTON_PIN_NUMBER = 14
 FINISH_BUTTON_PIN_NUMBER = 15
 
-# START_BUTTON = Button(START_BUTTON_PIN_NUMBER)
-# FINISH_BUTTON = Button(FINISH_BUTTON_PIN_NUMBER)
+START_BUTTON = Button(START_BUTTON_PIN_NUMBER)
+FINISH_BUTTON = Button(FINISH_BUTTON_PIN_NUMBER)
 
 START_TIME = None
 RIDER_ID = None
@@ -32,8 +34,8 @@ def set_rider_ready(rider_id, track_id, stage_id, points):
     if points is not None:
         POINTS = points
     # for debug
-    ride_start()
-    ride_finish()
+    # ride_start()
+    # ride_finish()
 
 
 def ride_cancel():
@@ -87,5 +89,5 @@ def set_rider_status(rider_id, track_id, stage_id, status):
     ).save()
 
 
-# START_BUTTON.when_activated = race_start
-# FINISH_BUTTON.when_activated = race_finish
+START_BUTTON.when_activated = ride_start
+FINISH_BUTTON.when_activated = ride_finish

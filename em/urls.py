@@ -31,7 +31,7 @@ urlpatterns = [
 
     path('result_delete/<int:result_id>/<int:track_id>/<int:stage_id>', views.result_delete, name='result_delete'),
 
-    path('liderboard/', views.LiderboardView.as_view(), name='liderboard'),
+    path('liderboard/', views.leaderboard, name='liderboard'),
 ]
 
 if settings.DEBUG:

@@ -1,4 +1,3 @@
-import operator
 import os
 
 from django.db.models import Sum, Min
@@ -48,33 +47,35 @@ class StagesView(generic.ListView):
     context_object_name = 'stages_list'
 
     def get_queryset(self):
-        return Stage.objects.order_by('date_start')[:]
+        return Stage.objects.order_by('date_start')
 
 
-class LiderboardView(generic.ListView):
-    template_name = 'liderboard.html'
-    context_object_name = 'data'
-
-    def get_queryset(self):
-        riders = Rider.objects.order_by('id')[:]
-        stage = None
-        results = None
-        stage_leaders = None
-        if Stage.objects.exists():
-            if Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now() - timedelta(days=3)).exists():
-                stage = Stage.objects.order_by('date_start').filter(
-                    date_start__gte=datetime.now() - timedelta(days=3)
-                )[:1].get()
-                stage_leaders = get_leaders_for_stage(stage)
-        return {
-            'riders': riders,
-            'stage': stage,
-            'results': results,
-            'stage_leaders': stage_leaders,
+def leaderboard(request):
+    stages_list = []
+    if Stage.objects.exists():
+        if Stage.objects.order_by('date_end').filter(date_end__lt=datetime.now()).exists():
+            stages_list = Stage.objects.order_by('date_end').filter(
+                date_end__lt=datetime.now())
+    for stage in stages_list:
+        stage.details = {
+            'tracks': get_stage_details(stage.id)[1],
+            'riders': get_stage_details(stage.id)[1],
         }
+    return render(request, 'liderboard.html', {
+        'data': stages_list,
+    })
 
 
 def stage_details(request, pk):
+    details = get_stage_details(pk)
+    return render(request, 'stage_details.html', {
+        'stage': details[0],
+        'tracks': details[1],
+        'riders': details[2],
+    })
+
+
+def get_stage_details(pk):
     stage = Stage.objects.get(id=pk)
     tracks = Track.objects.filter(stage_id=pk)
     riders_in_stage = RiderAndStage.objects.filter(stage=stage)
@@ -88,7 +89,7 @@ def stage_details(request, pk):
         })
     for track in tracks:
         track.leaders = get_leaders_for_track(stage.id, track)
-    return render(request, 'stage_details.html', {'riders': riders, 'stage': stage, 'tracks': tracks})
+    return stage, tracks, riders
 
 
 def track_details(request, pk, stage_id):
@@ -170,56 +171,6 @@ def get_leaders_for_track(stage_id, track):
                 'points': leader['points'],
             })
     return leaders
-
-
-def get_leaders_for_stage(stage):
-    Leaderboard.objects.all().delete()
-    tracks = Track.objects.filter(stage_id=stage.id)
-    for track in tracks:
-        track_leaders = get_leaders_for_track(stage.id, track)
-        if track_leaders.__len__() > 0:
-            Leaderboard(
-                stage_id=stage.id,
-                track_id=track_leaders[0]['track'],
-                rider_id=track_leaders[0]['id'],
-                finished=1,
-            ).save()
-            Leaderboard(
-                stage_id=stage.id,
-                track_id=track_leaders[1]['track'],
-                rider_id=track_leaders[1]['id'],
-                finished=2,
-            ).save()
-            Leaderboard(
-                stage_id=stage.id,
-                track_id=track_leaders[2]['track'],
-                rider_id=track_leaders[2]['id'],
-                finished=3,
-            ).save()
-    # get stage leaders
-    leaders = [{
-        'first': choose_best_rider_for_place(1, stage),
-        'second': choose_best_rider_for_place(2, stage),
-        'third': choose_best_rider_for_place(3, stage),
-    }]
-    return leaders
-
-
-def choose_best_rider_for_place(place, stage):
-    first_portion = Leaderboard.objects.filter(
-            stage_id=stage.id,
-            finished=place,
-        ).values('rider_id').distinct()
-    counters = {}
-    for rider in first_portion:
-        counters.update({
-            rider['rider_id']: Leaderboard.objects.filter(
-                stage_id=stage.id,
-                rider_id=rider['rider_id'],
-            ).values('rider_id').count()
-        })
-    selective = [max(counters.items(), key=operator.itemgetter(1))[1]]
-    return selective
 
 
 def rider_add(request):

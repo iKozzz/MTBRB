@@ -25,3 +25,11 @@ Python 3 + [Django](https://www.djangoproject.com)
 Теперь появился доступ к `http://мой_ip(:мой_port)/admin` 
 
 *  Использовать `./start.sh` или `./stop.sh` для управления сервером
+
+Запуск при включении питания Raspberry Pi
+---
+* sudo nano /etc/rc.local
+
+добавить в конец файла перед ``exit 0`` следующее:
+* `cd /home/pi/MTBRB`
+* `sudo sh start.sh`

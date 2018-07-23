@@ -1,5 +1,5 @@
 ## MTBRB
-Python 3 + [Django](https://www.djangoproject.com)
+Raspberry PI + Python 3 + [Django](https://www.djangoproject.com)
 ---
 
 

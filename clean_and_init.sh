@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "=== INSTALLING LIBS ==="
-bash -c "sudo pip install django pillow"
+bash -c "sudo pip3 install django pillow xlwt"
 bash -c "sudo apt update"
 bash -c "sudo apt install -y python3-gpiozero"
 echo "=== DONE INSTALLING LIBS ==="

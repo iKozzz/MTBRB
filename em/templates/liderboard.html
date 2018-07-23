@@ -58,12 +58,19 @@
                 {% endfor %}
             </div>
         {% endfor %}
+
+        <div class="mx-3 my-2">
+            <a class="w-100 btn btn-outline-dark bg-light text-uppercase text-primary" role="button" href="{% url 'em:export_leaders_xls' %}">
+                <i class="fas fa-file-excel"></i>
+                экспорт в XSL
+            </a>
+        </div>
     {% else %}
         <div class="row">
             <div class="mx-auto">
                 <h3 class="text-center my-2 mx-auto">пусто</h3>
             </div>
         </div>
-{% endif %}
+    {% endif %}
 
 {% endblock %}

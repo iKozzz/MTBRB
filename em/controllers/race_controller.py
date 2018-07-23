@@ -1,5 +1,4 @@
-from datetime import datetime, timedelta
-from random import uniform
+from datetime import datetime
 
 from gpiozero import Button
 
@@ -18,9 +17,8 @@ STAGE_ID = None
 POINTS = 0
 
 
-def get_current_timestamp(delta):
-    # return datetime.now()
-    return datetime.now() + timedelta(seconds=delta)
+def get_current_timestamp():
+    return datetime.now()
 
 
 def set_rider_ready(rider_id, track_id, stage_id, points):
@@ -33,9 +31,6 @@ def set_rider_ready(rider_id, track_id, stage_id, points):
     STAGE_ID = stage_id
     if points is not None:
         POINTS = points
-    # for debug
-    # ride_start()
-    # ride_finish()
 
 
 def ride_cancel():
@@ -51,7 +46,7 @@ def ride_start():
     global START_TIME
     # check start time to prevent issues with start button
     if RIDER_ID is not None and START_TIME is None:
-        START_TIME = get_current_timestamp(0)
+        START_TIME = get_current_timestamp()
 
 
 def ride_finish():
@@ -60,7 +55,7 @@ def ride_finish():
     global STAGE_ID
     global POINTS
     if RIDER_ID is not None:
-        finish_time = get_current_timestamp(uniform(1, 5))
+        finish_time = get_current_timestamp()
         result = finish_time - START_TIME
         Result(
             track=Track.objects.get(id=TRACK_ID),

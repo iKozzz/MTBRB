@@ -1,6 +1,9 @@
 import os
+from datetime import timedelta
 
+import xlwt as xlwt
 from django.db.models import Sum, Min
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import generic
 
@@ -59,11 +62,56 @@ def leaderboard(request):
     for stage in stages_list:
         stage.details = {
             'tracks': get_stage_details(stage.id)[1],
-            'riders': get_stage_details(stage.id)[1],
         }
     return render(request, 'liderboard.html', {
         'data': stages_list,
     })
+
+
+def export_leaders_xls(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="leaders.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Leaders')
+    # Шапка
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['Этап',
+               'Трэк',
+               '1 - Имя', '1 - Номер', '1 - Время/Очки',
+               '2 - Имя', '2 - Номер', '2 - Время/Очки',
+               '3 - Имя', '3 - Номер', '3 - Время/Очки',
+               ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+    # Данные
+    font_style = xlwt.XFStyle()
+    stages_list = Stage.objects.order_by('date_end').filter(date_end__lt=datetime.now())
+    for stage in stages_list:
+        stage.details = {
+            'tracks': get_stage_details(stage.id)[1],
+            'riders': get_stage_details(stage.id)[2],
+        }
+
+        row_num += 1
+        ws.write(row_num, 0, stage.name, font_style)
+        for track in stage.details['tracks']:
+            row_num += 1
+            col_num = 1
+            ws.write(row_num, col_num, track.name, font_style)
+            for leader in track.leaders:
+                col_num += 1
+                ws.write(row_num, col_num, leader['name'], font_style)
+                col_num += 1
+                ws.write(row_num, col_num, leader['number'], font_style)
+                col_num += 1
+                if track.isCountingTime:
+                    ws.write(row_num, col_num, leader['time'], font_style)
+                else:
+                    ws.write(row_num, col_num, leader['points'], font_style)
+    wb.save(response)
+    return response
 
 
 def stage_details(request, pk):

@@ -32,6 +32,7 @@ urlpatterns = [
     path('result_delete/<int:result_id>/<int:track_id>/<int:stage_id>', views.result_delete, name='result_delete'),
 
     path('leaderboard/', views.leaderboard, name='leaderboard'),
+    path('leaderboard/export/', views.export_leaders_xls, name='export_leaders_xls'),
 ]
 
 if settings.DEBUG:

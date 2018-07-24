@@ -43,10 +43,12 @@
                 <li class="list-group-item">
                     {% if leader.time %}
                         <span class="float-left">
-                            <i class="fas fa-bicycle mr-2 text-info"></i>
-                            <label class="f-n">
+                            <i class="fas fa-bicycle mr-1 text-info"></i>
+                            <label class="f-sm text-warning">
                                 <a href="#rider-{{ leader.id }}">{{ leader.number }}</a>
                             </label>
+                            <i class="fas fa-circle mr-1 text-light"></i>
+                            <label class="f-sm text-danger">{{ leader.name }}</label>
                         </span>
                         <span class="float-right">
                             <i class="fas fa-stopwatch mr-2 text-info"></i>
@@ -54,9 +56,13 @@
                         </span>
                     {% else %}
                         {% if leader.points > 0 %}
-                           <span class="float-left">
-                            <i class="fas fa-bicycle mr-2 text-info"></i>
-                            <label class="f-n">{{ leader.number }}</label>
+                        <span class="float-left">
+                            <i class="fas fa-bicycle mr-1 text-info"></i>
+                            <label class="f-sm text-warning">
+                                <a href="#rider-{{ leader.id }}">{{ leader.number }}</a>
+                            </label>
+                            <i class="fas fa-circle mr-1 text-light"></i>
+                            <label class="f-sm text-danger">{{ leader.name }}</label>
                         </span>
                         <span class="float-right">
                             <i class="fas fa-star mr-2 text-info"></i>

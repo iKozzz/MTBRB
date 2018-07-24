@@ -1,14 +1,14 @@
 from datetime import datetime
 
+from gpiozero import Button
+
 from em.models import *
 
-# from gpiozero import Button
+START_BUTTON_GPIO_PIN = 17
+FINISH_BUTTON_GPIO_PIN = 18
 
-# START_BUTTON_GPIO_PIN = 17
-# FINISH_BUTTON_GPIO_PIN = 18
-
-# START_BUTTON = Button(START_BUTTON_GPIO_PIN)
-# FINISH_BUTTON = Button(FINISH_BUTTON_GPIO_PIN)
+START_BUTTON = Button(START_BUTTON_GPIO_PIN)
+FINISH_BUTTON = Button(FINISH_BUTTON_GPIO_PIN)
 
 START_TIME = None
 RIDER_ID = None
@@ -85,5 +85,5 @@ def set_rider_status(rider_id, track_id, stage_id, status):
     ).save()
 
 
-# START_BUTTON.when_activated = ride_start
-# FINISH_BUTTON.when_activated = ride_finish
+START_BUTTON.when_activated = ride_start
+FINISH_BUTTON.when_activated = ride_finish

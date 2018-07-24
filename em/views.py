@@ -140,7 +140,7 @@ def get_stage_details(pk):
     return stage, tracks, riders
 
 
-def track_details(request, pk, stage_id, rider_id):
+def track_details(request, pk, stage_id):
     track = None
     stage = Stage.objects.get(id=stage_id)
     riders_in_stage = RiderAndStage.objects.filter(stage=stage)
@@ -176,7 +176,7 @@ def track_details(request, pk, stage_id, rider_id):
         'stage': stage,
         'track': track,
         'leaders': leaders,
-        'current_rider': rider_id,
+        'current_rider': get_current_rider_id(),
     })
 
 
@@ -288,7 +288,7 @@ def rider_cancel_ride(request, track_id, stage_id):
 
 def rider_prepare_to_ride_with_time(request, rider_id, track_id, stage_id):
     set_rider_ready(rider_id, track_id, stage_id, None)
-    return redirect('em:track_details', track_id, stage_id, rider_id)
+    return redirect('em:track_details', track_id, stage_id)
 
 
 def rider_prepare_to_ride_with_points(request, rider_id, track_id, stage_id):

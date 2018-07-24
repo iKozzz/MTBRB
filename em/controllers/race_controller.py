@@ -17,6 +17,10 @@ STAGE_ID = None
 POINTS = 0
 
 
+def get_current_rider_id():
+    return RIDER_ID
+
+
 def get_current_timestamp():
     return datetime.now()
 

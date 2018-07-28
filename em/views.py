@@ -21,7 +21,7 @@ class RidersView(generic.ListView):
     context_object_name = 'data'
 
     def get_queryset(self):
-        riders = Rider.objects.order_by('id')[:]
+        riders = Rider.objects.order_by('id')
         stage = None
         riders_in_stage = []
         if Stage.objects.exists():
@@ -73,15 +73,14 @@ def export_leaders_xls(request):
     response['Content-Disposition'] = 'attachment; filename="leaders.xls"'
     wb = xlwt.Workbook(encoding='utf-8')
     ws = wb.add_sheet('Leaders')
-    # Шапка
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
     columns = ['Этап',
                'Трэк',
-               '1 - Имя', '1 - Номер', '1 - Время/Очки',
-               '2 - Имя', '2 - Номер', '2 - Время/Очки',
-               '3 - Имя', '3 - Номер', '3 - Время/Очки',
+               'Номер',
+               'Имя',
+               'Время/Очки',
                ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
@@ -89,22 +88,21 @@ def export_leaders_xls(request):
     font_style = xlwt.XFStyle()
     stages_list = Stage.objects.order_by('date_end').filter(date_end__lt=datetime.now())
     for stage in stages_list:
+        row_num += 1
         stage.details = {
             'tracks': get_stage_details(stage.id)[1],
             'riders': get_stage_details(stage.id)[2],
         }
-
-        row_num += 1
         ws.write(row_num, 0, stage.name, font_style)
         for track in stage.details['tracks']:
             row_num += 1
-            col_num = 1
-            ws.write(row_num, col_num, track.name, font_style)
+            ws.write(row_num, 1, track.name, font_style)
             for leader in track.leaders:
+                col_num = 2
+                row_num += 1
+                ws.write(row_num, col_num, leader['number'], font_style)
                 col_num += 1
                 ws.write(row_num, col_num, leader['name'], font_style)
-                col_num += 1
-                ws.write(row_num, col_num, leader['number'], font_style)
                 col_num += 1
                 if track.isCountingTime:
                     ws.write(row_num, col_num, leader['time'], font_style)

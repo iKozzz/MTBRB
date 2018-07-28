@@ -13,9 +13,6 @@
     <div class="w-100 mx-3">
         <span class="text-success">начало</span><h5 class="text-primary">{{ stage.date_start }}</h5>
     </div>
-    <div class="w-100 mx-3">
-        <span class="text-danger">конец</span><h5 class="text-primary">{{ stage.date_end }}</h5>
-    </div>
 </div>
 {% if stage.info %}
 <div class="row">
@@ -27,7 +24,7 @@
 </div>
 {% endif %}
 <div class="row my-3">
-    <a class="w-100 text-center text-primary" href="{% url 'em:stages'%}">
+    <a class="mx-auto text-center text-white bg-link px-2 rounded" href="{% url 'em:stages'%}">
         <i class="fas fa-arrow-left mr-2"></i>вернуться к списку этапов
     </a>
 </div>
@@ -61,8 +58,8 @@
             <div class="row mx-1 mb-3 mt-3">
             <h6 class="mx-auto text-secondary">лидеры</h6>
                 <ul class="list-group w-100 text-justify">
-                    {%  for leader in track.leaders %}
-                        <li class="list-group-item">
+                    {%  for leader in track.leaders|slice:":3" %}
+                        <li class="list-group-item bg-sky">
                             {% if leader.time %}
                                 <span class="float-left">
                                     <i class="fas fa-bicycle mr-1 text-info"></i>

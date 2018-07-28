@@ -193,7 +193,7 @@ def get_leaders_for_track(stage_id, track):
         ).filter(
             stage_id=stage_id,
             track_id=track.id,
-        ).values('rider').annotate(time=Min('result_time')).order_by('time')[:3]
+        ).values('rider').annotate(time=Min('result_time')).exclude(time__iexact=None).order_by('time')
         for leader in raw_leaders:
             rider = Rider.objects.get(id=leader['rider'])
             leaders.append({
@@ -209,7 +209,7 @@ def get_leaders_for_track(stage_id, track):
         ).filter(
             stage_id=stage_id,
             track_id=track.id,
-        ).values('rider').annotate(points=Sum('points')).order_by('-points')[:3]
+        ).values('rider').annotate(points=Sum('points')).order_by('-points')
         for leader in raw_leaders:
             rider = Rider.objects.get(id=leader['rider'])
             leaders.append({

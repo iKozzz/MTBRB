@@ -11,18 +11,20 @@
 
         {% for stage in data %}
             <div class="mx-1 mb-4 mt-3 border border-secondary rounded bg-secondary">
-                <h4 class="text-center pt-2 text-white">
-                    {{ stage }}
+                <h4 class="text-center pt-2">
+                    <a href="{% url 'em:stage_details' stage.id %}" class="text-white">{{ stage }}</a>
                 </h4>
 
                 {% for track in stage.details.tracks %}
                     <div class="bg-light mx-3 rounded">
-                        <h5 class="text-center text-secondary pt-3">{{ track }}</h5>
+                        <h5 class="text-center text-secondary pt-3">
+                            <a href="{% url 'em:track_details' track.id stage.id %}" class="text-secondary">{{ track }}</a>
+                        </h5>
                         {% if track.leaders %}
                             <div class="mx-1 mb-3 mt-3">
                             <ul class="list-group w-100 text-justify">
-                                {%  for leader in track.leaders %}
-                                    <li class="list-group-item mb-1">
+                                {%  for leader in track.leaders|slice:":3" %}
+                                    <div class="bg-light">
                                         {% if leader.time %}
                                             <span class="float-left">
                                                 <i class="fas fa-bicycle mr-1 text-info"></i>
@@ -31,24 +33,54 @@
                                                 <label class="f-sm text-danger">{{ leader.name }}</label>
                                             </span>
                                             <span class="float-right">
-                                                <i class="fas fa-stopwatch mr-1 text-info"></i>
-                                                <label class="f-sm">{{ leader.time }}</label>
+                                                <i class="fas fa-stopwatch mr-2 text-info"></i>
+                                                <label class="f-n">{{ leader.time }}</label>
                                             </span>
                                         {% else %}
                                             {% if leader.points > 0 %}
-                                               <span class="float-left">
-                                                <i class="fas fa-bicycle mr-1 text-info"></i>
-                                                <label class="f-sm text-warning">{{ leader.number }}</label>
-                                                <i class="fas fa-circle mr-1 text-light"></i>
-                                                <label class="f-sm text-danger">{{ leader.name }}</label>
-                                            </span>
-                                            <span class="float-right">
-                                                <i class="fas fa-star mr-1 text-info"></i>
-                                                <label class="f-sm">{{ leader.points }}</label>
-                                            </span>
+                                                <span class="float-left">
+                                                    <i class="fas fa-bicycle mr-1 text-info"></i>
+                                                    <label class="f-sm text-warning">{{ leader.number }}</label>
+                                                    <i class="fas fa-circle mr-1 text-light"></i>
+                                                    <label class="f-sm text-danger">{{ leader.name }}</label>
+                                                </span>
+                                                <span class="float-right">
+                                                    <i class="fas fa-star mr-2 text-info"></i>
+                                                    <label class="f-n">{{ leader.points }}</label>
+                                                </span>
                                             {% endif %}
                                         {% endif %}
-                                    </li>
+                                    </div>
+                                {% endfor %}
+
+                                {%  for leader in track.leaders|slice:"3:" %}
+                                    <div class="bg-light">
+                                        {% if leader.time %}
+                                            <span class="float-left">
+                                                <i class="fas fa-bicycle mr-1 text-info"></i>
+                                                <label class="f-xsm text-secondary">{{ leader.number }}</label>
+                                                <i class="fas fa-circle mr-1 text-light"></i>
+                                                <label class="f-xsm text-secondary">{{ leader.name }}</label>
+                                            </span>
+                                            <span class="float-right">
+                                                <i class="fas fa-stopwatch mr-2 text-info"></i>
+                                                <label class="f-xsm text-secondary">{{ leader.time }}</label>
+                                            </span>
+                                        {% else %}
+                                            {% if leader.points > 0 %}
+                                                <span class="float-left">
+                                                    <i class="fas fa-bicycle mr-1 text-info"></i>
+                                                    <label class="f-xsm text-secondary">{{ leader.number }}</label>
+                                                    <i class="fas fa-circle mr-1 text-light"></i>
+                                                    <label class="f-xsm text-secondary">{{ leader.name }}</label>
+                                                </span>
+                                                <span class="float-right">
+                                                    <i class="fas fa-star mr-2 text-info"></i>
+                                                    <label class="f-xsm text-secondary">{{ leader.points }}</label>
+                                                </span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
                                 {% endfor %}
                             </ul>
                             </div>
@@ -62,7 +94,7 @@
         <div class="mx-3 my-2">
             <a class="w-100 btn btn-outline-dark bg-light text-uppercase text-primary" role="button" href="{% url 'em:export_leaders_xls' %}">
                 <i class="fas fa-file-excel"></i>
-                экспорт в XSL
+                экспорт в XLS
             </a>
         </div>
     {% else %}

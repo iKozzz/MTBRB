@@ -5,3 +5,15 @@
 .f-sm {
     font-size: 1.2rem;
 }
+
+.f-xsm {
+    font-size: 0.8rem;
+}
+
+.bg-link {
+    background-color: #b12bd8!important;
+}
+
+.bg-sky {
+    background-color: #f5e8ff8a!important;
+}

@@ -4,7 +4,11 @@
 
     <div class="row">
         <div class="mx-auto">
-            <h6 class="text-center text-secondary my-2 mx-auto">трэк</h6>
+            <h6 class="text-center text-secondary my-2 mx-auto">трэк
+            {% if track.isQualification %}
+                 квалификации
+            {% endif %}
+            </h6>
             <h2 class="text-center mx-auto mt-2">{{ track.name }}</h2>
         </div>
     </div>
@@ -15,7 +19,7 @@
             <h6 class="col-sm-6 mt-3 text-center"><label class="badge-dark rounded px-3 py-2">Статус: закрыто</label></h6>
         {% endif %}
 
-        <h5 class="col-sm-6 text-center">
+        <h5 class="text-center">
             <label class="badge-info rounded px-3 py-2">
                 Соревнование на {% if track.isCountingTime %}время{% else %}баллы{% endif %}
             </label>
@@ -60,7 +64,7 @@
                                         <i class="fas fa-circle mr-1 text-light"></i>
                                         <label class="f-sm text-danger">{{ leader.name }}</label>
                                     </span>
-                                    <span class="float-right">
+                                    <span class="float-right bg-sky px-2 rounded">
                                         <i class="fas fa-stopwatch mr-2 text-info"></i>
                                         <label class="f-n">{{ leader.time }}</label>
                                     </span>
@@ -72,7 +76,7 @@
                                             <i class="fas fa-circle mr-1 text-light"></i>
                                             <label class="f-sm text-danger">{{ leader.name }}</label>
                                         </span>
-                                        <span class="float-right">
+                                        <span class="float-right bg-sky px-2 rounded">
                                             <i class="fas fa-star mr-2 text-info"></i>
                                             <label class="f-n">{{ leader.points }}</label>
                                         </span>

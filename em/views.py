@@ -56,9 +56,8 @@ class StagesView(generic.ListView):
 def leaderboard(request):
     stages_list = []
     if Stage.objects.exists():
-        if Stage.objects.order_by('date_end').filter(date_end__lt=datetime.now()).exists():
-            stages_list = Stage.objects.order_by('date_end').filter(
-                date_end__lt=datetime.now())
+        if Stage.objects.order_by('date_end').exists():
+            stages_list = Stage.objects.order_by('date_end')
     for stage in stages_list:
         stage.details = {
             'tracks': get_stage_details(stage.id)[1],
@@ -86,7 +85,7 @@ def export_leaders_xls(request):
         ws.write(row_num, col_num, columns[col_num], font_style)
     # Данные
     font_style = xlwt.XFStyle()
-    stages_list = Stage.objects.order_by('date_end').filter(date_end__lt=datetime.now())
+    stages_list = Stage.objects.order_by('date_end')
     for stage in stages_list:
         row_num += 1
         stage.details = {
@@ -141,7 +140,10 @@ def get_stage_details(pk):
 def track_details(request, pk, stage_id):
     track = None
     stage = Stage.objects.get(id=stage_id)
-    riders_in_stage = RiderAndStage.objects.filter(stage=stage)
+    if RiderAndStage.objects.filter(start_order=None).count() == 0:
+        riders_in_stage = RiderAndStage.objects.filter(stage=stage).order_by('start_order')
+    else:
+        riders_in_stage = RiderAndStage.objects.filter(stage=stage)
     if Track.objects.exists():
         track = Track.objects.get(id=pk)
     riders = []
@@ -270,8 +272,24 @@ def track_delete(request, track_id, stage_id):
 def track_finalize(request, track_id, stage_id):
     track = Track.objects.get(id=track_id)
     track.isOpened = TRACK_STATUSES[1][0]
+    if track.isQualification is True:
+        assign_start_order_number(stage_id, get_leaders_for_track(stage_id, Track.objects.get(id=track_id)))
     track.save()
     return redirect('em:stage_details', stage_id)
+
+
+def assign_start_order_number(stage_id, leaders):
+    i = 0
+    for leader in leaders:
+        rider = Rider.objects.get(id=leader['id'])
+        stage = Stage.objects.get(id=stage_id)
+        ras = RiderAndStage.objects.get(
+            rider=rider,
+            stage=stage,
+        )
+        ras.start_order = i
+        ras.save()
+        i += 1
 
 
 def result_delete(request, result_id, track_id, stage_id):

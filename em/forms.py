@@ -1,4 +1,5 @@
 from django.forms import *
+
 from em.models import *
 
 
@@ -50,6 +51,7 @@ class RiderAddForm(ModelForm):
 class TrackAddForm(ModelForm):
     stage_id = IntegerField
     isOpened = CharField
+    isQualification = CheckboxInput
     name = CharField(
         widget=TextInput(
             attrs={
@@ -75,7 +77,7 @@ class TrackAddForm(ModelForm):
 
     class Meta:
         model = Track
-        fields = ['stage_id', 'isOpened', 'name', 'info', 'isCountingTime']
+        fields = ['stage_id', 'isOpened', 'name', 'info', 'isCountingTime', 'isQualification']
 
 
 class StageAddForm(ModelForm):

@@ -31,16 +31,19 @@
 
 <div class="row mx-1 mb-2 mt-3 border border-dark rounded bg-secondary">
     <div class="mx-auto">
-        <h3 class="mt-2 text-white">трассы этапа</h3>
+        <h3 class="mt-2 text-white">треки этапа</h3>
     </div>
 
     {% if tracks %}
     <a class="w-100 btn btn-success mx-5 mb-3" role="button" href="{% url 'em:track_add' stage.id %}">
-        <i class="fas fa-plus-square"></i> Добавиь трассу этапа
+        <i class="fas fa-plus-square"></i> Добавиь трек этапа
     </a>
     {% for track in tracks %}
      <div class="w-100 border border-secondary bg-light rounded my-3 mx-3">
         <div class="mx-3 my-2">
+            {% if track.isQualification %}
+                <h6 class="text-center text-secondary"><span class="bg-sky px-2 py-1 rounded">трек квалификаци</span></h6>
+            {% endif %}
             <h3 class="text-center"><a class="w-100 text-primary" href="{% url 'em:track_details' track.id stage.id %}">{{ track.name }}</a></h3>
             <h6 class="text-center">
                 <label class="border bg-white rounded text-secondary px-3 py-2">

@@ -32,7 +32,7 @@ class Rider(models.Model):
 
 class Stage(models.Model):
     name = models.CharField(max_length=100)
-    info = models.CharField(max_length=1000, blank=True)
+    info = models.CharField(max_length=1000, blank=True, null=True)
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -47,6 +47,7 @@ class Track(models.Model):
     info = models.CharField(max_length=1000, blank=True)
     isOpened = models.BooleanField()
     isCountingTime = models.BooleanField()
+    isQualification = models.BooleanField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -56,6 +57,7 @@ class Track(models.Model):
 class RiderAndStage(models.Model):
     rider = models.ForeignKey(Rider, on_delete=models.CASCADE)
     stage = models.ForeignKey(Stage, on_delete=models.CASCADE)
+    start_order = models.IntegerField(blank=True, null=True)
 
 
 class Result(models.Model):

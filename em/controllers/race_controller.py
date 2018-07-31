@@ -2,6 +2,7 @@ from datetime import datetime
 
 from gpiozero import Button
 
+from em.controllers.buzzer_controller import *
 from em.models import *
 
 START_BUTTON_GPIO_PIN = 17
@@ -46,6 +47,7 @@ def ride_cancel():
     START_TIME = None
     RIDER_ID = None
     STAGE_ID = None
+    ride_cancel_alert()
 
 
 def ride_start():
@@ -53,6 +55,7 @@ def ride_start():
     # check start time to prevent issues with start button
     if RIDER_ID is not None and START_TIME is None:
         START_TIME = get_current_timestamp()
+        ride_start_alert()
 
 
 def ride_finish():
@@ -77,6 +80,7 @@ def ride_finish():
         RIDER_ID = None
         STAGE_ID = None
         POINTS = 0
+        ride_finish_alert()
 
 
 def set_rider_status(rider_id, track_id, stage_id, status):

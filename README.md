@@ -33,3 +33,4 @@ Raspberry PI + Python 3 + [Django](https://www.djangoproject.com)
 добавить в конец файла перед ``exit 0`` следующее:
 * `cd /home/pi/MTBRB`
 * `sudo sh start.sh`
+* `nohup sudo sh wifi_controller.sh > /dev/null 2>&1 &`

@@ -14,12 +14,12 @@
     </div>
     <div class="row bg-light py-2">
         {% if track.isOpened %}
-            <h6 class="col-sm-6 mt-3 text-center"><label class="badge-success rounded px-3 py-2">Статус: активно</label></h6>
+            <h6 class="mx-auto mt-3 text-center"><label class="badge-success rounded px-3 py-2">Статус: активно</label></h6>
         {% else %}
-            <h6 class="col-sm-6 mt-3 text-center"><label class="badge-dark rounded px-3 py-2">Статус: закрыто</label></h6>
+            <h6 class="mx-auto mt-3 text-center"><label class="badge-dark rounded px-3 py-2">Статус: закрыто</label></h6>
         {% endif %}
 
-        <h5 class="text-center">
+        <h5 class="mx-auto text-center">
             <label class="badge-info rounded px-3 py-2">
                 Соревнование на {% if track.isCountingTime %}время{% else %}баллы{% endif %}
             </label>
@@ -87,7 +87,7 @@
                     {% endfor %}
 
                     {%  for leader in leaders|slice:"3:" %}
-                        <li class="bg-white pt-1">
+                        <li class="bg-white small-li">
                             <a href="#rider-{{ leader.id }}">
                                 {% if leader.time %}
                                     <span class="float-left">

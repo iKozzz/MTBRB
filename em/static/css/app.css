@@ -17,3 +17,8 @@
 .bg-sky {
     background-color: #f5e8ff8a!important;
 }
+
+.small-li {
+    list-style: none;
+    padding: 0.5rem 1rem 0.5rem 1rem;
+}

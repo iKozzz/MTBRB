@@ -4,16 +4,18 @@ bz = Buzzer(10)
 
 
 def server_startup_alert():
-    bz.blink(1, 0.5, 3)
+    bz.blink(on_time=1, off_time=0.5, n=3, background=True)
 
 
 def ride_start_alert():
-    bz.blink(2, 1, 1)
+    bz.on()
+    # bz.blink(on_time=1, off_time=0.5, n=3, background=True)
 
 
 def ride_finish_alert():
-    bz.blink(4, 1, 2)
+    bz.off()
+    # bz.blink(on_time=1, off_time=0.5, n=3, background=True)
 
 
 def ride_cancel_alert():
-    bz.blink(1, 1, 2)
+    bz.blink(on_time=3, off_time=0, n=1, background=True)

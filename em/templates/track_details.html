@@ -40,7 +40,8 @@
         </a>
     </div>
 
-    {% if current_rider %}
+
+    {% if current_rider and track.id == current_track %}
         <div class="row my-3">
             <a class="mx-auto mt-2 text-center text-white bg-info px-2 rounded" href="#rider-{{ current_rider }}">
                 <i class="fas fa-arrow-down mr-2"></i>кто сейчас едет
@@ -211,9 +212,9 @@
                             <div id="actions-{{ rider.id }}" class="w-100">
                                 {% if track.isCountingTime %}
                                     {% if rider.id == current_rider and track.id == current_track %}
-                                        <span class="bg-info rounded px-2 mb-2 col-sm-12">
+                                        <div class="bg-info rounded px-2 py-1 mb-1 mx-auto text-center">
                                             <i class="fas fa-flag mr-2"></i>в пути
-                                        </span>
+                                        </div>
                                     {% else %}
                                         <a class="btn btn-success mb-2 col-sm-12" href="{%url 'em:rider_prepare_to_ride_with_time' rider.id track.id stage.id%}">
                                             <i class="fas fa-flag mr-2"></i>приготовить к старту

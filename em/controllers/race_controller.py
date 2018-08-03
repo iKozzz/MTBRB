@@ -5,8 +5,8 @@ from gpiozero import Button
 from em.controllers.buzzer_controller import *
 from em.models import *
 
-START_BUTTON_GPIO_PIN = 17
-FINISH_BUTTON_GPIO_PIN = 18
+START_BUTTON_GPIO_PIN = 2
+FINISH_BUTTON_GPIO_PIN = 3
 
 START_BUTTON = Button(START_BUTTON_GPIO_PIN)
 FINISH_BUTTON = Button(FINISH_BUTTON_GPIO_PIN)
@@ -20,6 +20,10 @@ POINTS = 0
 
 def get_current_rider_id():
     return RIDER_ID
+
+
+def get_current_track_id():
+    return TRACK_ID
 
 
 def get_current_timestamp():
@@ -61,6 +65,7 @@ def ride_start():
 def ride_finish():
     global START_TIME
     global RIDER_ID
+    global TRACK_ID
     global STAGE_ID
     global POINTS
     if RIDER_ID is not None:
@@ -78,6 +83,7 @@ def ride_finish():
             ).save()
         START_TIME = None
         RIDER_ID = None
+        TRACK_ID = None
         STAGE_ID = None
         POINTS = 0
         ride_finish_alert()

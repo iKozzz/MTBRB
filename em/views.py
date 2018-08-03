@@ -177,6 +177,7 @@ def track_details(request, pk, stage_id):
         'track': track,
         'leaders': leaders,
         'current_rider': get_current_rider_id(),
+        'current_track': get_current_track_id(),
     })
 
 

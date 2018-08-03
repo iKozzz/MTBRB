@@ -1,6 +1,6 @@
 from gpiozero import Buzzer
 
-bz = Buzzer(10)
+bz = Buzzer(11)
 
 
 def server_startup_alert():

@@ -22,39 +22,39 @@
                         </h5>
                         {% if track.leaders %}
                             <div class="mx-1 mb-3 mt-3">
-                            <ul class="list-group w-100 text-justify">
+                            <ol class="list-group w-100 text-justify">
                                 {%  for leader in track.leaders|slice:":3" %}
-                                    <div class="bg-light">
+                                    <li class="bg-light">
                                         {% if leader.time %}
                                             <span class="float-left">
                                                 <i class="fas fa-bicycle mr-1 text-info"></i>
-                                                <label class="f-sm text-warning">{{ leader.number }}</label>
+                                                <label class="f-xsm text-warning">{{ leader.number }}</label>
                                                 <i class="fas fa-circle mr-1 text-light"></i>
-                                                <label class="f-sm text-danger">{{ leader.name }}</label>
+                                                <label class="f-xsm text-danger">{{ leader.name }}</label>
                                             </span>
                                             <span class="float-right">
                                                 <i class="fas fa-stopwatch mr-2 text-info"></i>
-                                                <label class="f-n">{{ leader.time }}</label>
+                                                <label class="f-xsm">{{ leader.time }}</label>
                                             </span>
                                         {% else %}
                                             {% if leader.points > 0 %}
                                                 <span class="float-left">
                                                     <i class="fas fa-bicycle mr-1 text-info"></i>
-                                                    <label class="f-sm text-warning">{{ leader.number }}</label>
+                                                    <label class="f-xsm text-warning">{{ leader.number }}</label>
                                                     <i class="fas fa-circle mr-1 text-light"></i>
-                                                    <label class="f-sm text-danger">{{ leader.name }}</label>
+                                                    <label class="f-xsm text-danger">{{ leader.name }}</label>
                                                 </span>
                                                 <span class="float-right">
                                                     <i class="fas fa-star mr-2 text-info"></i>
-                                                    <label class="f-n">{{ leader.points }}</label>
+                                                    <label class="f-xsm">{{ leader.points }}</label>
                                                 </span>
                                             {% endif %}
                                         {% endif %}
-                                    </div>
+                                    </li>
                                 {% endfor %}
 
                                 {%  for leader in track.leaders|slice:"3:" %}
-                                    <div class="bg-light">
+                                    <li class="bg-light">
                                         {% if leader.time %}
                                             <span class="float-left">
                                                 <i class="fas fa-bicycle mr-1 text-info"></i>
@@ -80,9 +80,9 @@
                                                 </span>
                                             {% endif %}
                                         {% endif %}
-                                    </div>
+                                    </li>
                                 {% endfor %}
-                            </ul>
+                            </ol>
                             </div>
                         {% endif %}
                     </div>
@@ -94,7 +94,7 @@
         <div class="mx-3 my-2">
             <a class="w-100 btn btn-outline-dark bg-light text-uppercase text-primary" role="button" href="{% url 'em:export_leaders_xls' %}">
                 <i class="fas fa-file-excel text-success"></i>
-                экспорт в XLS
+                скачать полный протокол
             </a>
         </div>
     {% else %}

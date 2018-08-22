@@ -75,12 +75,13 @@ def export_leaders_xls(request):
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
-    columns = ['Этап',
-               'Трэк',
-               'Номер',
-               'Имя',
-               'Время/Очки',
-               ]
+    columns = [
+        'Этап',
+        'Трэк',
+        'Номер участника',
+        'Имя',
+        'Время/Очки',
+    ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
     # Данные
@@ -96,17 +97,30 @@ def export_leaders_xls(request):
         for track in stage.details['tracks']:
             row_num += 1
             ws.write(row_num, 1, track.name, font_style)
-            for leader in track.leaders:
+            row_num += 1
+            members = Result.objects.filter(stage=stage.id, track=track.id).values('rider_id').distinct()
+            for member in members:
+                rider = Rider.objects.filter(pk=member['rider_id']).get()
                 col_num = 2
-                row_num += 1
-                ws.write(row_num, col_num, leader['number'], font_style)
+                ws.write(row_num, col_num, rider.number, font_style)
                 col_num += 1
-                ws.write(row_num, col_num, leader['name'], font_style)
+                ws.write(row_num, col_num, rider.name, font_style)
                 col_num += 1
+                member_res = Result.objects.filter(track=track.id, stage=stage.id, rider=rider.id)
                 if track.isCountingTime:
-                    ws.write(row_num, col_num, leader['time'], font_style)
+                    for res in member_res:
+                        if res.result_time:
+                            ws.write(row_num, col_num, res.result_time, font_style)
+                        else:
+                            ws.write(row_num, col_num, res.status, font_style)
+                        row_num += 1
                 else:
-                    ws.write(row_num, col_num, leader['points'], font_style)
+                    for res in member_res:
+                        if res.points:
+                            ws.write(row_num, col_num, res.points, font_style)
+                        else:
+                            ws.write(row_num, col_num, res.status, font_style)
+                        row_num += 1
     wb.save(response)
     return response
 
@@ -123,7 +137,7 @@ def stage_details(request, pk):
 def get_stage_details(pk):
     stage = Stage.objects.get(id=pk)
     tracks = Track.objects.filter(stage_id=pk)
-    riders_in_stage = RiderAndStage.objects.filter(stage=stage)
+    riders_in_stage = RiderAndStage.objects.filter(stage=stage).order_by('-start_order')
     riders = []
     for rider_in_stage in riders_in_stage:
         rider = Rider.objects.get(id=rider_in_stage.rider.id)
@@ -141,7 +155,7 @@ def track_details(request, pk, stage_id):
     track = None
     stage = Stage.objects.get(id=stage_id)
     if RiderAndStage.objects.filter(start_order=None).count() == 0:
-        riders_in_stage = RiderAndStage.objects.filter(stage=stage).order_by('start_order')
+        riders_in_stage = RiderAndStage.objects.filter(stage=stage).order_by('-start_order')
     else:
         riders_in_stage = RiderAndStage.objects.filter(stage=stage)
     if Track.objects.exists():

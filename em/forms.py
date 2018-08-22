@@ -30,7 +30,8 @@ class RiderAddForm(ModelForm):
                 'type': 'text',
                 'placeholder': 'Дополнительная информация'
             }
-        )
+        ),
+        required=False
     )
     photo = FileField(
         widget=FileInput(
@@ -97,7 +98,8 @@ class StageAddForm(ModelForm):
                 'type': 'text',
                 'placeholder': 'Опишите подробности'
             }
-        )
+        ),
+        required=False
     )
     date_start = SplitDateTimeField(
         widget=SplitDateTimeWidget(

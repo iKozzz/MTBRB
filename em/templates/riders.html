@@ -25,16 +25,21 @@
     {% if data.riders %}
     {% for rider in data.riders %}
     <div class="row border border-secondary bg-light my-5 mx-1 p-2">
-        <div class="col-sm-12">
-            <h3 class="text-center mx-auto"><a class="w-100 mt-1 mb-3" href="{% url 'em:rider_details' rider.id %}">{{ rider.name }}</a></h3>
-            <h4 class="text-center mx-auto">- {{ rider.number }} -</h4>
-        </div>
-        <div class="col-sm-12">
+        <div class="col-sm-3">
             {% if rider.photo %}
                 <img class="img-fluid img-thumbnail" src="{{ rider.photo.url }}" alt="rider_avatar">
             {% else %}
                 {% load static %}
                 <img class="img-fluid img-thumbnail" src="{% static 'rider_unknown.svg' %}" alt="rider_avatar">
+            {% endif %}
+        </div>
+        <div class="col-sm-9">
+            <h3 class="text-center mx-auto"><a class="w-100 mt-1 mb-3" href="{% url 'em:rider_details' rider.id %}">{{ rider.name }}</a></h3>
+            <h4 class="text-center mx-auto">- {{ rider.number }} -</h4>
+            {% if rider.info %}
+                <div>
+                    {{ rider.info }}
+                </div>
             {% endif %}
         </div>
     {% if data.stage %}

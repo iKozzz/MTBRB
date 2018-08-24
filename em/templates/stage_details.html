@@ -30,12 +30,12 @@
 </div>
 
 <div class="row mx-1 mb-2 mt-2 border border-dark rounded bg-secondary">
-    <div class="mx-auto">
-        <h3 class="mt-2 text-white">треки этапа</h3>
+    <div class="w-100">
+        <h3 class="mt-2 text-center text-white">треки этапа</h3>
     </div>
 
     {% if tracks %}
-    <a class="w-100 btn btn-success mx-5 mb-2" role="button" href="{% url 'em:track_add' stage.id %}">
+    <a class="mx-auto btn btn-success mx-5 mb-2" role="button" href="{% url 'em:track_add' stage.id %}">
         <i class="fas fa-plus-square"></i> Добавиь трек этапа
     </a>
     {% for track in tracks %}
@@ -105,16 +105,16 @@
 </div>
 
 <div class="row mx-1 mb-2 mt-4 border border-dark rounded bg-secondary">
-    <div class="mx-auto">
-        <h3 class="mt-2 text-white">райдеры этапа</h3>
+    <div class="w-100">
+        <h3 class="mt-2 text-center text-white">райдеры этапа</h3>
     </div>
     {% if riders %}
-    <a class="btn btn-success mx-auto mb-2" role="button" href="{% url 'em:riders' %}">
-        <i class="fas fa-plus-square"></i> Добавиь райдера на этап
-    </a>
+        <a class="btn btn-success mx-auto mb-2" role="button" href="{% url 'em:riders' %}">
+            <i class="fas fa-plus-square"></i> Добавиь райдера на этап
+        </a>
     {% for rider in riders %}
      <div class="w-100 border border-secondary rounded bg-light my-2 mx-2">
-        <div class="mx-2 my-2 col-sm-10">
+        <div class="mx-2 my-2">
             <div>
                 <span>
                     - {{ rider.number }} -

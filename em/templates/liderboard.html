@@ -22,31 +22,29 @@
                         </h5>
                         {% if track.leaders %}
                             <div class="mx-1 mb-3 mt-3">
-                            <ol class="list-group w-100 text-justify">
+                            <ol class="list-group w-100 text-white f-xsm">
                                 {%  for leader in track.leaders|slice:":3" %}
-                                    <li class="bg-light">
+                                    <li class="bg-white border px-1">
                                         {% if leader.time %}
-                                            <span class="float-left">
+                                            <span>
                                                 <i class="fas fa-bicycle mr-1 text-info"></i>
                                                 <label class="f-xsm text-warning">{{ leader.number }}</label>
-                                                <i class="fas fa-circle mr-1 text-light"></i>
                                                 <label class="f-xsm text-danger">{{ leader.name }}</label>
                                             </span>
                                             <span class="float-right">
                                                 <i class="fas fa-stopwatch mr-2 text-info"></i>
-                                                <label class="f-xsm">{{ leader.time }}</label>
+                                                <label class="f-xsm text-dark">{{ leader.time }}</label>
                                             </span>
                                         {% else %}
                                             {% if leader.points > 0 %}
                                                 <span class="float-left">
                                                     <i class="fas fa-bicycle mr-1 text-info"></i>
-                                                    <label class="f-xsm text-warning">{{ leader.number }}</label>
-                                                    <i class="fas fa-circle mr-1 text-light"></i>
+                                                    <label class="f-xsm text-dark">{{ leader.number }}</label>
                                                     <label class="f-xsm text-danger">{{ leader.name }}</label>
                                                 </span>
                                                 <span class="float-right">
                                                     <i class="fas fa-star mr-2 text-info"></i>
-                                                    <label class="f-xsm">{{ leader.points }}</label>
+                                                    <label class="f-xsm text-dark">{{ leader.points }}</label>
                                                 </span>
                                             {% endif %}
                                         {% endif %}
@@ -54,29 +52,27 @@
                                 {% endfor %}
 
                                 {%  for leader in track.leaders|slice:"3:" %}
-                                    <li class="bg-light">
+                                    <li class="bg-white border px-1">
                                         {% if leader.time %}
                                             <span class="float-left">
                                                 <i class="fas fa-bicycle mr-1 text-info"></i>
-                                                <label class="f-xsm text-secondary">{{ leader.number }}</label>
-                                                <i class="fas fa-circle mr-1 text-light"></i>
+                                                <label class="f-xsm text-dark">{{ leader.number }}</label>
                                                 <label class="f-xsm text-secondary">{{ leader.name }}</label>
                                             </span>
                                             <span class="float-right">
                                                 <i class="fas fa-stopwatch mr-2 text-info"></i>
-                                                <label class="f-xsm text-secondary">{{ leader.time }}</label>
+                                                <label class="f-xsm text-dark">{{ leader.time }}</label>
                                             </span>
                                         {% else %}
                                             {% if leader.points > 0 %}
                                                 <span class="float-left">
                                                     <i class="fas fa-bicycle mr-1 text-info"></i>
-                                                    <label class="f-xsm text-secondary">{{ leader.number }}</label>
-                                                    <i class="fas fa-circle mr-1 text-light"></i>
+                                                    <label class="f-xsm text-dark">{{ leader.number }}</label>
                                                     <label class="f-xsm text-secondary">{{ leader.name }}</label>
                                                 </span>
                                                 <span class="float-right">
                                                     <i class="fas fa-star mr-2 text-info"></i>
-                                                    <label class="f-xsm text-secondary">{{ leader.points }}</label>
+                                                    <label class="f-xsm text-dark">{{ leader.points }}</label>
                                                 </span>
                                             {% endif %}
                                         {% endif %}

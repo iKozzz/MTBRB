@@ -2,7 +2,7 @@
 
 {% block body_block %}
 
-<div class="mt-3">
+<div class="mt-2">
     <div class="row">
         <h3 class="mx-auto">Список этапов</h3>
         <a class="w-100 btn btn-success mx-3" role="button" href="{% url 'em:stage_add' %}">
@@ -10,18 +10,17 @@
         </a>
     </div>
 </div>
-<div class="mt-4">
+<div class="mt-2">
     {% if stages_list %}
     {% for stage in stages_list %}
     <div class="row bg-light border border-secondary my-3 mx-1 p-2">
         <div class="col-sm-12">
-            <h4>
+            <h4 class="text-center">
                 {{ stage.name }}
             </h4>
         </div>
         <div class="col-sm-12">
-            <h6 class="text-success">Начало:</h6>
-            <h5>{{ stage.date_start }}</h5>
+            <h6 class="text-center text-success">Начало: <label class="text-secondary f-xsm">{{ stage.date_start }}</label></h6>
         </div>
         <div class="col-sm-12">
             <a class="w-100 mx-auto btn btn-info" href="{% url 'em:stage_details' stage.id %}" role="button"><i class="fas fa-info-circle"></i> подробнее</a>
@@ -29,7 +28,7 @@
     </div>
     {% endfor %}
     {% else %}
-    <div class="mx-3 my-5">
+    <div class="mx-3 my-2">
         <a class="w-100 btn btn-info text-uppercase" role="button" href="{% url 'em:stage_add' %}">
             <i class="fas fa-info-circle"></i>
                 нужно добавить этап

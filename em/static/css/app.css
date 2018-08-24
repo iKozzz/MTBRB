@@ -1,3 +1,7 @@
+.f-l {
+    font-size: 1.4rem;
+}
+
 .f-n {
     font-size: 1.3rem;
 }
@@ -11,14 +15,13 @@
 }
 
 .bg-link {
-    background-color: #b12bd8!important;
+    background-color: #b681efbd!important;
 }
 
 .bg-sky {
-    background-color: #f5e8ff8a!important;
+    background-color: #f1f8fdd6!important;
 }
 
 .small-li {
-    list-style: none;
     padding: 0.5rem 1rem 0.5rem 1rem;
 }

@@ -16,23 +16,21 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="{% url 'em:index' %}">MTBRB - Event Manager</a>
+    <a class="navbar-brand" href="{% url 'em:index' %}">MTB Event Manager</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link fa-2x text-center" href="{% url 'em:riders' %}">Райдеры</a></li>
-            <li class="nav-item"><a class="nav-link fa-2x text-center" href="{% url 'em:stages' %}">Этапы</a></li>
-            <li class="nav-item"><a class="nav-link fa-2x text-center" href="{% url 'em:leaderboard' %}">Лидеры</a></li>
+            <li class="nav-item"><a class="nav-link f-l text-center" href="{% url 'em:riders' %}">Райдеры</a></li>
+            <li class="nav-item"><a class="nav-link f-l text-center" href="{% url 'em:stages' %}">Этапы</a></li>
+            <li class="nav-item"><a class="nav-link f-l text-center" href="{% url 'em:leaderboard' %}">Лидеры</a></li>
         </ul>
   </div>
 </nav>
-<div class="container theme-showcase" role="main">
+<div class="container theme-showcase mb-3" role="main">
 {% block body_block %}{% endblock %}
 </div>
-
-<footer class="footer mt-5"></footer>
 
 {% load static %}
 <script type=text/javascript src="{% static 'js/jquery-3.2.1.slim.min.js' %}"></script>

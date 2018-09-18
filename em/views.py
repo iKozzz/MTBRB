@@ -154,10 +154,7 @@ def get_stage_details(pk):
 def track_details(request, pk, stage_id):
     track = None
     stage = Stage.objects.get(id=stage_id)
-    if RiderAndStage.objects.filter(start_order=None).count() == 0:
-        riders_in_stage = RiderAndStage.objects.filter(stage=stage).order_by('-start_order')
-    else:
-        riders_in_stage = RiderAndStage.objects.filter(stage=stage)
+    riders_in_stage = RiderAndStage.objects.filter(stage=stage).order_by('-start_order')
     if Track.objects.exists():
         track = Track.objects.get(id=pk)
     riders = []

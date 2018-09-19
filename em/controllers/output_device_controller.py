@@ -33,8 +33,9 @@ def connection_test_start():
 
 
 def connection_test_end():
-    sb.when_activated(None)
-    fb.when_activated(None)
+    ld.blink(0.15, 0.05, 3)
+    # sb.when_activated(None)
+    # fb.when_activated(None)
 
 
 def make_some_noise():

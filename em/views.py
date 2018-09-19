@@ -69,9 +69,9 @@ def leaderboard(request):
 
 def export_leaders_xls(request):
     response = HttpResponse(content_type='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename="leaders.xls"'
+    response['Content-Disposition'] = 'attachment; filename="results.xls"'
     wb = xlwt.Workbook(encoding='utf-8')
-    ws = wb.add_sheet('Leaders')
+    ws = wb.add_sheet('Результаты')
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
@@ -86,6 +86,10 @@ def export_leaders_xls(request):
         ws.write(row_num, col_num, columns[col_num], font_style)
     # Данные
     font_style = xlwt.XFStyle()
+    result_time_style = xlwt.XFStyle()
+    result_time_style.num_format_str = 'h:mm:ss.0'
+    numbers_style = xlwt.XFStyle()
+    numbers_style.num_format_str = '0'
     stages_list = Stage.objects.order_by('date_end')
     for stage in stages_list:
         row_num += 1
@@ -102,7 +106,7 @@ def export_leaders_xls(request):
             for member in members:
                 rider = Rider.objects.filter(pk=member['rider_id']).get()
                 col_num = 2
-                ws.write(row_num, col_num, rider.number, font_style)
+                ws.write(row_num, col_num, rider.number, numbers_style)
                 col_num += 1
                 ws.write(row_num, col_num, rider.name, font_style)
                 col_num += 1
@@ -110,14 +114,14 @@ def export_leaders_xls(request):
                 if track.isCountingTime:
                     for res in member_res:
                         if res.result_time:
-                            ws.write(row_num, col_num, res.result_time, font_style)
+                            ws.write(row_num, col_num, res.result_time, result_time_style)
                         else:
                             ws.write(row_num, col_num, res.status, font_style)
                         row_num += 1
                 else:
                     for res in member_res:
                         if res.points:
-                            ws.write(row_num, col_num, res.points, font_style)
+                            ws.write(row_num, col_num, res.points, numbers_style)
                         else:
                             ws.write(row_num, col_num, res.status, font_style)
                         row_num += 1

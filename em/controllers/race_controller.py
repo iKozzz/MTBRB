@@ -52,7 +52,7 @@ def ride_cancel():
 
 
 def ride_start():
-    make_some_action()
+    make_some_light()
     global START_TIME
     # check start time to prevent issues with start button
     if RIDER_ID is not None and START_TIME is None:
@@ -61,7 +61,7 @@ def ride_start():
 
 
 def ride_finish():
-    make_some_action()
+    make_some_light()
     global START_TIME
     global RIDER_ID
     global TRACK_ID

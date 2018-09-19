@@ -42,7 +42,6 @@ def set_rider_ready(rider_id, track_id, stage_id, points):
 
 
 def ride_cancel():
-    make_some_action()
     global START_TIME
     global RIDER_ID
     global STAGE_ID
@@ -62,6 +61,7 @@ def ride_start():
 
 
 def ride_finish():
+    make_some_action()
     global START_TIME
     global RIDER_ID
     global TRACK_ID

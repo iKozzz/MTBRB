@@ -2,7 +2,7 @@ from datetime import datetime
 
 from gpiozero import Button
 
-from em.controllers.buzzer_controller import *
+from em.controllers.output_device_controller import *
 from em.models import *
 
 START_BUTTON_GPIO_PIN = 2

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
 
-from em.controllers.buzzer_controller import server_startup_alert
+from em.controllers.output_device_controller import server_startup_alert
 from . import views
 
 app_name = 'em'
@@ -34,6 +34,8 @@ urlpatterns = [
 
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     path('leaderboard/export/', views.export_leaders_xls, name='export_leaders_xls'),
+
+    path('connection_test/', views.connection_test, name='connection_test'),
 ]
 
 if settings.DEBUG:

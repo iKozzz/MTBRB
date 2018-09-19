@@ -8,12 +8,21 @@ from django.shortcuts import render, redirect
 from django.views import generic
 
 from em.controllers.race_controller import *
+from em.controllers.output_device_controller import connection_test_start, connection_test_end
 from em.forms import *
 from .models import *
 
 
 class IndexView(generic.TemplateView):
     template_name = 'index.html'
+
+
+def connection_test(request, status):
+    if status is 'start':
+        connection_test_start()
+    else:
+        connection_test_end()
+    return redirect('em:index')
 
 
 class RidersView(generic.ListView):

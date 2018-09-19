@@ -18,7 +18,7 @@ class IndexView(generic.TemplateView):
 
 
 def connection_test(request, status):
-    if status is 'start':
+    if status is 1:
         connection_test_start()
     else:
         connection_test_end()

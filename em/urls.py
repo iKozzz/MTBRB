@@ -35,7 +35,7 @@ urlpatterns = [
     path('leaderboard/', views.leaderboard, name='leaderboard'),
     path('leaderboard/export/', views.export_leaders_xls, name='export_leaders_xls'),
 
-    path('connection_test/', views.connection_test, name='connection_test'),
+    path('connection_test/<int:status>', views.connection_test, name='connection_test'),
 ]
 
 if settings.DEBUG:

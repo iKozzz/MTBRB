@@ -1,9 +1,7 @@
-from gpiozero import Buzzer, LED, Button
+from gpiozero import Buzzer, LED
 
 bz = Buzzer(11)
 ld = LED(15)
-sb = Button(2)
-fb = Button(3)
 
 
 def server_startup_alert():

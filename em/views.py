@@ -25,9 +25,9 @@ class RidersView(generic.ListView):
         stage = None
         riders_in_stage = []
         if Stage.objects.exists():
-            if Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now()-timedelta(days=2)).exists():
+            if Stage.objects.order_by('date_start').filter(date_start__gte=datetime.now()-timedelta(days=1)).exists():
                 stage = Stage.objects.order_by('date_start').filter(
-                    date_start__gte=datetime.now()-timedelta(days=2)
+                    date_start__gte=datetime.now()-timedelta(days=1)
                 )[:1].get()
                 riders_in_stage_table = RiderAndStage.objects.filter(stage=stage)
                 for rider_in_stage_table in riders_in_stage_table:

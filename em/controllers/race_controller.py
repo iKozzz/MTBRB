@@ -42,6 +42,7 @@ def set_rider_ready(rider_id, track_id, stage_id, points):
 
 
 def ride_cancel():
+    make_some_action()
     global START_TIME
     global RIDER_ID
     global STAGE_ID
@@ -52,6 +53,7 @@ def ride_cancel():
 
 
 def ride_start():
+    make_some_action()
     global START_TIME
     # check start time to prevent issues with start button
     if RIDER_ID is not None and START_TIME is None:

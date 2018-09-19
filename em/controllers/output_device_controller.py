@@ -24,18 +24,5 @@ def ride_cancel_alert():
     ld.blink(0.08, 0.05, 2)
 
 
-def connection_test_start():
-    bz.blink(0.15, 0.05, 3)
-    # sb.when_activated(make_some_noise())
-    # fb.when_activated(make_some_noise())
-
-
-def connection_test_end():
-    ld.blink(0.15, 0.05, 3)
-    # sb.when_activated(None)
-    # fb.when_activated(None)
-
-
-def make_some_noise():
-    bz.blink(0.15, 0.05, 3)
-    ld.blink(0.15, 0.05, 3)
+def make_some_action():
+    ld.blink(0.10, 0.03, 6)

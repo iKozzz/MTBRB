@@ -5,11 +5,8 @@ from gpiozero import Button
 from em.controllers.output_device_controller import *
 from em.models import *
 
-START_BUTTON_GPIO_PIN = 2
-FINISH_BUTTON_GPIO_PIN = 3
-
-START_BUTTON = Button(START_BUTTON_GPIO_PIN)
-FINISH_BUTTON = Button(FINISH_BUTTON_GPIO_PIN)
+START_BUTTON = Button(2)
+FINISH_BUTTON = Button(3)
 
 START_TIME = None
 RIDER_ID = None

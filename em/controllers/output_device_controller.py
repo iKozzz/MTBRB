@@ -1,7 +1,9 @@
-from gpiozero import Buzzer, LED
+from gpiozero import Buzzer, LED, Button
 
 bz = Buzzer(11)
 ld = LED(15)
+sb = Button(2)
+fb = Button(3)
 
 
 def server_startup_alert():
@@ -25,10 +27,15 @@ def ride_cancel_alert():
 
 
 def connection_test_start():
-    bz.on()
-    ld.on()
+    sb.when_activated(make_some_noise())
+    fb.when_activated(make_some_noise())
 
 
 def connection_test_end():
-    bz.off()
-    ld.off()
+    sb.when_activated(None)
+    fb.when_activated(None)
+
+
+def make_some_noise():
+    bz.blink(0.15, 0.05, 3)
+    ld.blink(0.15, 0.05, 3)

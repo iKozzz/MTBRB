@@ -1,0 +1,21 @@
+{
+  "name": "Time Tracker For MTBRB",
+  "description": "Events management system for MTB",
+  "image": "heroku/python",
+  "repository": "https://github.com/iKozzz/MTBRB",
+  "keywords": ["python", "django" ],
+  "env": {
+    "SECRET_KEY": {
+      "description": "The secret key for the Django application.",
+      "generator": "secret"
+    }
+  },
+  "environments": {
+    "test": {
+      "scripts": {
+        "test-setup": "python manage.py collectstatic --noinput",
+        "test": "python manage.py test"
+      }
+    }
+  }
+}

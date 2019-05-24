@@ -1,12 +1,12 @@
 from datetime import datetime
 
-from gpiozero import Button
+# from gpiozero import Button
 
 from em.controllers.output_device_controller import *
 from em.models import *
 
-START_BUTTON = Button(2)
-FINISH_BUTTON = Button(3)
+# START_BUTTON = Button(2)
+# FINISH_BUTTON = Button(3)
 
 START_TIME = None
 RIDER_ID = None
@@ -48,20 +48,20 @@ def ride_cancel():
     START_TIME = None
     RIDER_ID = None
     STAGE_ID = None
-    ride_cancel_alert()
+    # ride_cancel_alert()
 
 
 def ride_start():
-    make_some_light()
+    # make_some_light()
     global START_TIME
     # check start time to prevent issues with start button
     if RIDER_ID is not None and START_TIME is None:
         START_TIME = get_current_timestamp()
-        ride_start_alert()
+        # ride_start_alert()
 
 
 def ride_finish():
-    make_some_light()
+    # make_some_light()
     global START_TIME
     global RIDER_ID
     global TRACK_ID
@@ -85,7 +85,7 @@ def ride_finish():
         TRACK_ID = None
         STAGE_ID = None
         POINTS = 0
-        ride_finish_alert()
+        # ride_finish_alert()
 
 
 def set_rider_status(rider_id, track_id, stage_id, status):
@@ -98,5 +98,5 @@ def set_rider_status(rider_id, track_id, stage_id, status):
     ).save()
 
 
-START_BUTTON.when_activated = ride_start
-FINISH_BUTTON.when_activated = ride_finish
+# START_BUTTON.when_activated = ride_start
+# FINISH_BUTTON.when_activated = ride_finish

@@ -1,4 +1,6 @@
 .idea
+MTBRB.iml
 db.sqlite3
 em/migrations/000*
 media
+venv

@@ -1,3 +1,5 @@
 django
 pillow
 xlwt
+dj-database-url
+psycopg2-binary

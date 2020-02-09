@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
+
 import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -75,8 +76,7 @@ WSGI_APPLICATION = 'MTBRB.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-
+DATABASES = {'default': dj_database_url.config(conn_max_age=600, ssl_require=True)}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators

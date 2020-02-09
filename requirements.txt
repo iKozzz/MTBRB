@@ -1,4 +1,4 @@
-django
+Django==3.0.3
 pillow
 xlwt
 dj-database-url

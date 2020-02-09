@@ -9,7 +9,7 @@ from django.views import generic
 
 from em.controllers.race_controller import *
 from em.forms import *
-from .models import *
+from em.models import *
 
 
 class IndexView(generic.TemplateView):
@@ -62,7 +62,7 @@ def leaderboard(request):
         stage.details = {
             'tracks': get_stage_details(stage.id)[1],
         }
-    return render(request, 'liderboard.html', {
+    return render(request, 'leaderboard.html', {
         'data': stages_list,
     })
 

@@ -1,9 +1,9 @@
 from datetime import datetime
 
-# from gpiozero import Button
-
-from em.controllers.output_device_controller import *
+# from em.controllers.output_device_controller import *
 from em.models import *
+
+# from gpiozero import Button
 
 # START_BUTTON = Button(2)
 # FINISH_BUTTON = Button(3)
